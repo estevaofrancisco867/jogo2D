@@ -4,7 +4,7 @@ import random
 
 tela = []
 cont = 0
-largura = 51 #originalmente 50
+largura = 50
 altura = 45
 
 aviao_y = altura - 1
