@@ -11,6 +11,8 @@ aviao_y = altura - 1
 aviao_x = largura // 2
 tiro_y = -1
 tiro_x = -1
+powerup_y = -1
+powerup_x = -1
 
 # Cada inimigo é uma tupla (x, y)
 inimigos = [(5, 0), (10, 0), (15, 0),(7, 0), (12, 0), (16, 0)]
@@ -41,6 +43,8 @@ def preencher_tela(tela,altura,largura,inimigos):
                 tela[y][x] = "|"
             elif y == aviao_y and x == aviao_x:
                 tela[y][x] = "^"
+            elif y == powerup_y and x == powerup_x:
+                tela[y][x] = "P"
             else:
                 tela[y][x] = " "
 
@@ -55,14 +59,18 @@ def mostrar_tela(tela,altura,largura,acertos):
     print(f"Acertos: {acertos}/50")
 
 def verifica_colisao(tiro_x,tiro_y,inimigos):
-    global acertos, tiro_y
+    global acertos
     if (tiro_x, tiro_y) in inimigos:
         inimigos.remove((tiro_x, tiro_y))
+        powerup(tiro_x,tiro_y, cont)
         acertos += 1
         tiro_y = -1
-        print("Acertou!")
         return True
     return False    
+
+def powerup(x, y, cont): # não funciona, arrumo dps
+    if cont % 20 == 0 and powerup_y != -1:
+       return y + 1, x
 
 def checar_vitoria():
     if acertos >= 50:
@@ -77,24 +85,42 @@ def checar_derrota():
     return False
 
 def entrada_jogador():
-    global aviao_x, aviao_y, tiro_x, tiro_y
-    print("a=esq d=dir w=cima s=baixo f=fogo: ")
+    global aviao_x, aviao_y, tiro_x, tiro_y, altura, largura
+    print("a,→ d,← w,↑ s,↓ f=fogo.")
     if WConio2.kbhit():
         codigo, simbolo = WConio2.getch()
+        print(codigo, " ",simbolo) # descobre o codigo da tecla pressionada
+
+        def aviao_esquerda(aviao_x):
+            if aviao_x > 0:
+                return aviao_x - 1
+            else: return aviao_x
+        def aviao_direita(aviao_x,largura):
+            if aviao_x < largura - 1:
+                return aviao_x + 1
+            else: return aviao_x
+        def aviao_cima(aviao_y):
+            if aviao_y > 0:
+                return aviao_y - 1
+            else: return aviao_y
+        def aviao_baixo(aviao_y,altura):
+            if aviao_y < altura - 1:
+                return aviao_y + 1
+            else: return aviao_y
 
         match codigo:
-            case 97: 
-                if aviao_x > 0:
-                    aviao_x -= 1
-            case 100:
-                if aviao_x < largura - 1:
-                    aviao_x += 1
-            case 119:
-                if aviao_y > 0:
-                    aviao_y -= 1
-            case 115:
-                if aviao_y < altura - 1:
-                    aviao_y += 1
+            case 97: aviao_x = aviao_esquerda(aviao_x) # a
+            case 65: aviao_x = aviao_esquerda(aviao_x) # A
+            case 75: aviao_x = aviao_esquerda(aviao_x) # →
+            case 100: aviao_x = aviao_direita(aviao_x,largura)
+            case 68: aviao_x = aviao_direita(aviao_x,largura)
+            case 77: aviao_x = aviao_direita(aviao_x,largura)
+            case 119: aviao_y = aviao_cima(aviao_y)
+            case 87: aviao_y = aviao_cima(aviao_y)
+            case 72: aviao_y = aviao_cima(aviao_y)
+            case 115: aviao_y = aviao_baixo(aviao_y, altura)
+            case 83: aviao_y = aviao_baixo(aviao_y, altura)
+            case 80: aviao_y = aviao_baixo(aviao_y, altura)
             case 102: 
                 if tiro_y == -1:
                     tiro_x = aviao_x
@@ -112,9 +138,8 @@ def moverInimigos(cont,inimigos,altura):
 
 def novos_inimigos(inimigos):
     if inimigos == []:
-       return[(3, 0),(17, 0),(20, 0),(22, 0)]
-    return inimigos
-
+        return[(3, 0),(17, 0),(20, 0),(22, 0)]
+    else: return inimigos
 
 
 limpar_tela()
@@ -122,9 +147,9 @@ criar_tela(altura, largura)
 
 while True:
     cont += 1
-    gotoxy(0,0)
-
     entrada_jogador()
+
+    gotoxy(0,0)
     tiro_y = movertiro(tiro_y)
     verifica_colisao(tiro_x,tiro_y,inimigos)
 
@@ -136,3 +161,94 @@ while True:
 
     if checar_vitoria() or checar_derrota():
         break
+
+# tiros = [[-1,-1]]
+
+
+# # Cada inimigo é uma tupla (x, y)
+# inimigos = [[5, 0], [10, 0], [15, 0],[7, 0], [12, 0], [16, 0]]
+# acertos = 0
+# limiteTiros = 1
+
+# # Criar funcao para tirar o pisca-pisca
+# def gotoxy(x, y):
+#     print(f"\033[{y};{x}H", end="", flush=True)
+
+# # Limpa o terminal ao executar
+# os.system("cls")
+
+# # Criando a tela
+# for y in range(altura):
+#     tela.append([])
+#     for x in range(largura):
+#         tela[y].append("")
+
+# # Jogo rodando
+# while True:
+
+#     # Preenche a tela com caracteres 
+#     for y in range(altura):
+#         for x in range(largura):
+#             if [x, y] in inimigos:
+#                 tela[y][x] ="@"
+#             elif y == powerup_y and x == powerup_x:
+#                 tela[y][x] = "P"
+#             elif [x, y] in tiros:
+#                 tela[y][x] = "|"
+#             elif y == aviao_y and x == aviao_x:
+#                 tela[y][x] = "^"
+#             else:
+#                 tela[y][x] = " "
+#     #Aumenta o contador
+#     cont += 1
+#     #Tira o pisca-pisca
+#     gotoxy(0,0)
+
+#     # Verifica se atingiu 50 acertos
+#     if acertos >= 50:
+#         print("Você venceu com 50 acertos!")
+#         break
+
+#     # Verifica se algum inimigo alcançou o avião
+#     for inimigo in inimigos:
+#         if inimigo[1] == altura - 2 or inimigo == [aviao_x,aviao_y]:
+#             print("Você foi atingido! Game Over.")
+#             parar = True
+#             break
+
+#     # Verifica se o powerup tocou no avião
+#     if aviao_x == powerup_x and aviao_y == powerup_y:
+#         powerup_y = -1
+#         powerup_x = -1
+
+#     # Entrada do jogador
+#     #print("a=esq d=dir f=fogo: ")
+#     if WConio2.kbhit():
+#         codigo, simbolo = WConio2.getch()
+
+#         match codigo:
+#             case 102: 
+#                 for tiro in tiros:
+#                     if tiro[1] == -1:
+#                         tiro = [aviao_x, aviao_y]
+
+#     # Mover tiro
+#     for tiro in tiros:
+#         if tiro[1] >= 0:
+#             tiro[1] -= 1
+
+#     # Mover inimigos para baixo
+#     if cont % 100 == 0:
+#         for inimigo in inimigos:
+#             if inimigo[1] < altura: inimigo[1] += 1
+#             # inimigos = [[x, y + 1] for [x, y] in inimigos if y + 1 < altura]
+
+
+#     # Adiciona novos inimigos em ondas de tempos em tempos (opcional)
+#     if inimigos == []:
+#         inimigos.append((3, 0))
+#         inimigos.append((17, 0))
+#         inimigos.append((20, 0))
+
+#         inimigos.append((22, 0))
+#  #       inimigos.append((random.randint(1, largura - 1),0))
