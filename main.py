@@ -107,7 +107,11 @@ def entrada_jogador():
             if aviao_y < altura - 1:
                 return aviao_y + 1
             else: return aviao_y
-
+        def atirar(tiro_x,tiro_y):
+            if tiro_y == -1:
+                tiro_x = aviao_x
+                tiro_y = aviao_y
+                return tiro_x,tiro_y
         match codigo:
             case 97: aviao_x = aviao_esquerda(aviao_x) # a
             case 65: aviao_x = aviao_esquerda(aviao_x) # A
@@ -121,10 +125,7 @@ def entrada_jogador():
             case 115: aviao_y = aviao_baixo(aviao_y, altura)
             case 83: aviao_y = aviao_baixo(aviao_y, altura)
             case 80: aviao_y = aviao_baixo(aviao_y, altura)
-            case 102: 
-                if tiro_y == -1:
-                    tiro_x = aviao_x
-                    tiro_y = aviao_y
+            case 102: tiro_x,tiro_y = atirar(tiro_x,tiro_y)
 
 def movertiro(tiro_y):
     if tiro_y >= 0:
