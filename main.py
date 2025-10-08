@@ -34,6 +34,7 @@ def criar_tela(altura, largura):
             tela[y].append("")
     return tela        
 
+# Renderiza os elementos da tela
 def preencher_tela(tela,altura,largura,inimigos):
     for y in range(altura):
         for x in range(largura):
@@ -48,6 +49,7 @@ def preencher_tela(tela,altura,largura,inimigos):
             else:
                 tela[y][x] = " "
 
+#Mostra a tela, suas bordas * e os acertos
 def mostrar_tela(tela,altura,largura,acertos):
     print("*"*(largura+2))
     for x in range(altura):
@@ -58,19 +60,23 @@ def mostrar_tela(tela,altura,largura,acertos):
     print("*"*(largura+2))
     print(f"Acertos: {acertos}/50")
 
+#Retorna True caso o tiro acerte em um inimigo
 def verifica_colisao(tiro_x,tiro_y,inimigos):
-    global acertos
+    global acertos, powerup_x, powerup_y
     if (tiro_x, tiro_y) in inimigos:
         inimigos.remove((tiro_x, tiro_y))
-        powerup(tiro_x,tiro_y, cont)
+        powerup_x,powerup_y = powerup(powerup_x,powerup_y)
         acertos += 1
         tiro_y = -1
-        return True
-    return False    
 
-def powerup(x, y, cont): # não funciona, arrumo dps
-    if cont % 20 == 0 and powerup_y != -1:
-       return y + 1, x
+def verifica_coleta(powerup_x,powerup_y):
+    if powerup_x == aviao_x and powerup_y == aviao_y:
+        return -1,-1
+    return powerup_x, powerup_y
+
+def powerup(x, y):
+    x, y = tiro_x, tiro_y
+    return x,y
 
 def checar_vitoria():
     if acertos >= 50:
@@ -86,7 +92,7 @@ def checar_derrota():
 
 def entrada_jogador():
     global aviao_x, aviao_y, tiro_x, tiro_y, altura, largura
-    print("a,→ d,← w,↑ s,↓ f=fogo.")
+    print(f"a,→ d,← w,↑ s,↓ f=fogo.")
     if WConio2.kbhit():
         codigo, simbolo = WConio2.getch()
         print(codigo, " ",simbolo) # descobre o codigo da tecla pressionada
@@ -111,7 +117,7 @@ def entrada_jogador():
             if tiro_y == -1:
                 tiro_x = aviao_x
                 tiro_y = aviao_y
-                return tiro_x,tiro_y
+            return tiro_x,tiro_y
         match codigo:
             case 97: aviao_x = aviao_esquerda(aviao_x) # a
             case 65: aviao_x = aviao_esquerda(aviao_x) # A
@@ -125,22 +131,40 @@ def entrada_jogador():
             case 115: aviao_y = aviao_baixo(aviao_y, altura)
             case 83: aviao_y = aviao_baixo(aviao_y, altura)
             case 80: aviao_y = aviao_baixo(aviao_y, altura)
-            case 102: tiro_x,tiro_y = atirar(tiro_x,tiro_y)
+            case 102: tiro_x,tiro_y = atirar(tiro_x,tiro_y) #f
+            case 32: tiro_x,tiro_y = atirar(tiro_x,tiro_y) # espaço
+
+def mover(x, y, intervalo = 1,condicao = True, direcao = 1):
+    if y is not False and x is not False:
+        if cont % intervalo == 0:
+            if condicao:
+                return x + direcao, y + direcao
+        return x, y
+    if x is not False:
+        if cont % intervalo == 0:
+            if condicao:
+                return x + direcao
+        return x
+    if y is not False:
+        if cont % intervalo == 0:
+            if condicao:
+                return y + direcao
+        return y
 
 def movertiro(tiro_y):
     if tiro_y >= 0:
         return tiro_y - 1
     return tiro_y     
 
-def moverInimigos(cont,inimigos,altura):
+def mover_inimigos(cont,inimigos):
     if cont % 100 == 0:
         return [(x, y + 1) for (x, y) in inimigos if y + 1 < altura]
     return inimigos
 
 def novos_inimigos(inimigos):
     if inimigos == []:
-        return[(3, 0),(17, 0),(20, 0),(22, 0)]
-    else: return inimigos
+        return[(3, 0),(17, 0),(20, 0),(22, 0),(25, 0)]
+    return inimigos
 
 
 limpar_tela()
@@ -151,10 +175,13 @@ while True:
     entrada_jogador()
 
     gotoxy(0,0)
-    tiro_y = movertiro(tiro_y)
+    tiro_y = mover(False,tiro_y,1,tiro_y >= 0,-1)
     verifica_colisao(tiro_x,tiro_y,inimigos)
 
-    inimigos = moverInimigos(cont,inimigos,altura)
+    powerup_y = mover(False,powerup_y,20,powerup_y != -1)
+    powerup_x,powerup_y = verifica_coleta(powerup_x,powerup_y)
+
+    inimigos = mover_inimigos(cont,inimigos)
     inimigos = novos_inimigos(inimigos)
 
     preencher_tela(tela,altura,largura,inimigos)
