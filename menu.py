@@ -1,4 +1,5 @@
 import os
+import WConio2
 
 
 #função para mudar o local do cursor
@@ -20,12 +21,36 @@ def LimparTela(tela):
         for x in range(largura_x): #horizontal
             tela[y][x] = " "
 
+#função para mudar as coordenadas da seta indicadora na tela(matriz)
+def SalvaCoordenadaAtualSetaIndicadora(codigo, y_seta_inicial, x_seta_inicial, y_seta_atual, x_seta_atual):
+    for y in range(altura_y):
+        for x in range(largura_x):
+            #Desenha Seta indicadora na primeira vez sem input do jogador
+            if y == y_seta_inicial and x == x_seta_inicial and codigo == None:
+                y_seta_atual = y_seta_inicial
+                x_seta_atual = x_seta_inicial
+            #Desenha Seta indicadora depois do input do jogador
+            elif y == y_seta_inicial and x == x_seta_inicial and (codigo == 115 or codigo == 83 or codigo == 80): #se a seta estiver em CONTINUAR e código é: (s, S, seta para baixo)
+                y_seta_atual = 11
+                x_seta_atual = 19
+            elif y == y_seta_inicial and x == x_seta_inicial and (codigo == 119 or codigo == 87 or codigo == 72): #se a seta estiver em CONTINUAR e código é: (w, W, seta para cima)
+                y_seta_atual = 9
+                x_seta_atual = 19
+
+            return y_seta_atual, x_seta_atual
+
 
 #função para desenhar na tela(matriz)
-def DesenharTela(tela, cont):
+def DesenharTela(tela, codigo):
     #coordenadas iniciais titulo
     esquerda_y_titulo = 7     #coordenada y inicial do primeiro item esquerdo do nome do jogo
     esquerda_x_titulo = 18     #coordenada x inicial da primeiro item esquerdo do nome do jogo
+    #coordenadas iniciais da Seta Indicadora no menu
+    y_seta_inicial = 9
+    x_seta_inicial = 19
+    #coordenadas atuais da Seta Indicadora após input de jogador
+    y_seta_atual = 2
+    x_seta_atual = 3
     #coordenadas iniciais CONTINUAR
     esquerda_y_continuar = 9
     esquerda_x_continuar = 21
@@ -54,6 +79,23 @@ def DesenharTela(tela, cont):
                 tela[y][x+12] = "R"
                 tela[y][x+13] = "S"
            
+            #Desenha Seta indicadora e salva as coordenadas atuais da seta indicadora
+
+            #Desenha Seta indicadora na primeira vez sem input do jogador
+            if y == y_seta_inicial and x == x_seta_inicial and codigo == None:
+                tela[y][x] = ">"
+                y_seta_atual, x_seta_atual = SalvaCoordenadaAtualSetaIndicadora(codigo, y_seta_inicial, x_seta_inicial, y_seta_atual, x_seta_atual)
+            #Desenha Seta indicadora depois do input do jogador
+            elif y == y_seta_inicial and x == x_seta_inicial and (codigo == 115 or codigo == 83 or codigo == 80): #se a seta estiver em CONTINUAR e código é: (s, S, seta para baixo)
+                # desenha a seta indicadora para NOVO JOGO
+                tela[11][19] = ">"
+                y_seta_atual, x_seta_atual = SalvaCoordenadaAtualSetaIndicadora(codigo, y_seta_inicial, x_seta_inicial, y_seta_atual, x_seta_atual)
+            elif y == y_seta_inicial and x == x_seta_inicial and (codigo == 119 or codigo == 87 or codigo == 72): #se a seta estiver em CONTINUAR e código é: (w, W, seta para cima)
+                # desenha a seta indicadora para CONTINUAR
+                tela[9][19] = ">"
+                y_seta_atual, x_seta_atual = SalvaCoordenadaAtualSetaIndicadora(codigo, y_seta_inicial, x_seta_inicial, y_seta_atual, x_seta_atual)
+
+
             #Desenha continuar
             if y == esquerda_y_continuar and x == esquerda_x_continuar:
                 tela[y][x] = "C"
@@ -90,18 +132,6 @@ def DesenharTela(tela, cont):
                 tela[y][x+7] = "A"
                 tela[y][x+8] = "S"
 
-            #desenha a animação da seta indicativa
-            if cont % 2 == 0:
-                tela[7][16] = ">"
-                tela[9][19] = ">"
-                tela[11][19] = ">"
-                tela[13][19] = ">"
-            else:
-                tela[7][17] = ">"
-                tela[9][20] = ">"
-                tela[11][20] = ">"
-                tela[13][20] = ">"
-
 
 #função para colocar a tela(matriz) no terminal
 def MostrarTela(tela):
@@ -115,6 +145,19 @@ def MostrarTela(tela):
 def AumentarRelogio(cont):
     cont += 1
     return cont
+
+
+#função para capturar o input do jogador para o menu
+def CapturaInput(codigo):
+    if WConio2.kbhit():
+        codigo, simbolo = WConio2.getch()
+        return codigo
+
+'''
+        if codigo == 97 or codigo == 65 or codigo == 75: #(a, A, seta para esquerda)
+        if codigo == 115 or codigo == 83 or codigo == 80: #(s, S, seta para baixo)
+        if codigo == 100 or codigo == 68 or codigo == 77: #(d, D, seta para direita)
+        if codigo == 119 or codigo == 87 or codigo == 72: #(w, W, seta para cima)'''
 
 
 '''
@@ -142,6 +185,9 @@ CriarTela(altura_y, largura_x, tela, item)
 # relogio geral
 cont = 0
 
+#codigo do input do jogador inicial
+codigo = None
+
 while True:
     altura_y = 35
     largura_x = 50
@@ -152,7 +198,7 @@ while True:
 
 
     #== DESENHAR O MENU NA TELA ==
-    DesenharTela(tela, cont)
+    DesenharTela(tela, codigo)
 
 
     #== COLOCANDO A TELA NO TERMINAL ==
@@ -161,3 +207,8 @@ while True:
 
     #== RELOGIO AUMENTA ==
     cont = AumentarRelogio(cont)
+
+    #== CAPTURA INPUT DO JOGADOR ==
+    codigo = CapturaInput(codigo)
+
+print(x_seta_atual, " ", y_seta_atual)
