@@ -183,17 +183,26 @@ def novos_inimigos(inimigos):
     return inimigos
 
 # Mover inimigos horizontais
-def mover_inimigos_horizontais():
+def mover_inimigos_horizontais(cont):
     global inimigos_horizontais, direcao_horizontais
+    VELOCIDADE_HORIZONTAL = 200  # Quanto maior, mais lento
+
+    if cont % VELOCIDADE_HORIZONTAL != 0:
+        return  # Só move a cada 200 ciclos
+
     for i in range(len(inimigos_horizontais)):
         x, y = inimigos_horizontais[i]
         direcao = direcao_horizontais[i]
 
-        novo_x = x + direcao
-        if novo_x >= largura - 1 or novo_x <= 0:
-            direcao_horizontais[i] *= -1  # muda de direção
+        # Inverter direção se chegar nas bordas
+        if x + direcao >= largura - 1 or x + direcao <= 0:
+            direcao_horizontais[i] *= -1
+            direcao = direcao_horizontais[i]
 
-        inimigos_horizontais[i] = (x + direcao_horizontais[i], y)
+        inimigos_horizontais[i] = (x + direcao, y)
+
+
+
 
 # Fazer inimigos atirarem (a cada 50 ciclos)
 def inimigos_atiram():
@@ -203,12 +212,17 @@ def inimigos_atiram():
             tiros_inimigos.append((x, y + 1))
 
 # Mover tiros dos inimigos
-def mover_tiros_inimigos():
+def mover_tiros_inimigos(cont):
     global tiros_inimigos
+    VELOCIDADE_TIRO_INIMIGO = 200  # Quanto maior, mais lento
+
+    if cont % VELOCIDADE_TIRO_INIMIGO != 0:
+        return  # só move os tiros de vez em quando
+
     novos_tiros = []
     for (x, y) in tiros_inimigos:
         if y < altura - 1:
-            novos_tiros.append((x, y + 1))  # descem
+            novos_tiros.append((x, y + 1))  # move para baixo
     tiros_inimigos[:] = novos_tiros
 
 limpar_tela()
@@ -237,13 +251,13 @@ while True:
     inimigos = novos_inimigos(inimigos)
 
     # Mover inimigos horizontais
-    mover_inimigos_horizontais()
+    mover_inimigos_horizontais(cont)
 
     # Inimigos horizontais atiram
     inimigos_atiram()
 
     # Mover os tiros dos inimigos
-    mover_tiros_inimigos()
+    mover_tiros_inimigos(cont)
 
     # Preencher e mostrar a tela
     preencher_tela(tela, altura, largura, inimigos)
@@ -261,4 +275,3 @@ while True:
     if (aviao_x, aviao_y) in tiros_inimigos:
         print("Você foi atingido por um tiro inimigo! Game Over.")
         break
-
