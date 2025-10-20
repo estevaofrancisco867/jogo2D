@@ -137,7 +137,7 @@ def entrada_jogador():
         match codigo:
             case 97: aviao_x = aviao_esquerda(aviao_x)  # a
             case 65: aviao_x = aviao_esquerda(aviao_x)  # A
-            case 75: aviao_x = aviao_esquerda(aviao_x)  # →
+            case 75: aviao_x = aviao_esquerda(aviao_x)  # → 
             case 100: aviao_x = aviao_direita(aviao_x, largura)
             case 68: aviao_x = aviao_direita(aviao_x, largura)
             case 77: aviao_x = aviao_direita(aviao_x, largura)
@@ -201,18 +201,15 @@ def mover_inimigos_horizontais(cont):
 
         inimigos_horizontais[i] = (x + direcao, y)
 
-
-
-
-# Fazer inimigos atirarem (a cada 50 ciclos)
+# Inimigos atiram
 def inimigos_atiram():
     global tiros_inimigos
-    if cont % 50 == 0:
+    if cont % 50 == 0:  # Cada 50 ciclos os inimigos atiram
         for (x, y) in inimigos_horizontais:
-            tiros_inimigos.append((x, y + 1))
+            tiros_inimigos.append((x, y + 1))  # Tiros dos inimigos (para baixo)
 
 # Mover tiros dos inimigos
-def mover_tiros_inimigos(cont):
+def mover_tiros_inimigos():
     global tiros_inimigos
     VELOCIDADE_TIRO_INIMIGO = 200  # Quanto maior, mais lento
 
@@ -224,6 +221,14 @@ def mover_tiros_inimigos(cont):
         if y < altura - 1:
             novos_tiros.append((x, y + 1))  # move para baixo
     tiros_inimigos[:] = novos_tiros
+
+# Verificar colisão do tiro inimigo com o avião
+def verifica_colisao_tiro_inimigo():
+    global acertos
+    if (aviao_x, aviao_y) in tiros_inimigos:
+        print("Você foi atingido por um tiro inimigo! Game Over.")
+        return True  # Retorna True se o avião for atingido
+    return False
 
 limpar_tela()
 criar_tela(altura, largura)
@@ -257,7 +262,11 @@ while True:
     inimigos_atiram()
 
     # Mover os tiros dos inimigos
-    mover_tiros_inimigos(cont)
+    mover_tiros_inimigos()
+
+    # Verificar se o jogador foi atingido
+    if verifica_colisao_tiro_inimigo():
+        break  # Se o jogador for atingido, termina o jogo
 
     # Preencher e mostrar a tela
     preencher_tela(tela, altura, largura, inimigos)
@@ -269,9 +278,4 @@ while True:
 
     # Verifica derrota por colisão com inimigo vertical
     if checar_derrota():
-        break
-
-    # Verifica colisão com tiro inimigo
-    if (aviao_x, aviao_y) in tiros_inimigos:
-        print("Você foi atingido por um tiro inimigo! Game Over.")
         break
