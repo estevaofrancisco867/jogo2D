@@ -16,8 +16,8 @@ powerup_x = -1
 
 # Cada inimigo é uma tupla (x, y)
 inimigos = [(5, 0), (10, 0), (15, 0), (7, 0), (12, 0), (16, 0)]
-inimigos_horizontais = [(0, 5), (0, 10)]  # inimigos horizontais
-direcao_horizontais = [1, 1]  # direção de movimento (1: direita, -1: esquerda)
+inimigos_horizontais = [(0, 5), (3, 8)]  # inimigos horizontais
+direcao_horizontais = [1, 1]  
 tiros_inimigos = []  # tiros inimigos
 acertos = 0
 
@@ -185,7 +185,7 @@ def novos_inimigos(inimigos):
 # Mover inimigos horizontais
 def mover_inimigos_horizontais(cont):
     global inimigos_horizontais, direcao_horizontais
-    VELOCIDADE_HORIZONTAL = 200  # Quanto maior, mais lento
+    VELOCIDADE_HORIZONTAL = 50  # Quanto maior, mais lento
 
     if cont % VELOCIDADE_HORIZONTAL != 0:
         return  # Só move a cada 200 ciclos
@@ -204,14 +204,14 @@ def mover_inimigos_horizontais(cont):
 # Inimigos atiram
 def inimigos_atiram():
     global tiros_inimigos
-    if cont % 50 == 0:  # Cada 50 ciclos os inimigos atiram
+    if cont % 1000 == 0:  # Cada ciclos os inimigos atiram
         for (x, y) in inimigos_horizontais:
             tiros_inimigos.append((x, y + 1))  # Tiros dos inimigos (para baixo)
 
 # Mover tiros dos inimigos
 def mover_tiros_inimigos():
     global tiros_inimigos
-    VELOCIDADE_TIRO_INIMIGO = 200  # Quanto maior, mais lento
+    VELOCIDADE_TIRO_INIMIGO = 40  # Quanto maior, mais lento
 
     if cont % VELOCIDADE_TIRO_INIMIGO != 0:
         return  # só move os tiros de vez em quando
