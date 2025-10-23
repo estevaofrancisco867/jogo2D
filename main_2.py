@@ -81,14 +81,6 @@ def verifica_colisao(tiro_x, tiro_y, inimigos, inimigos_horizontais):
         acertos += 1
         tiro_y = -1            
 
-# Verifica a colisão do tiro ao inimigo que surge da horizontal
-def verifica_colisao_2(tiro_x, tiro_y, inimigos_horizontais):
-    global acertos, powerup_x, powerup_y
-    if (tiro_x, tiro_y) in inimigos_horizontais:
-        inimigos.remove((tiro_x, tiro_y))
-        powerup_x, powerup_y = powerup(powerup_x, powerup_y)
-        acertos += 1
-        tiro_y = -1        
 
 def verifica_coleta(powerup_x, powerup_y):
     if powerup_x == aviao_x and powerup_y == aviao_y:
@@ -282,9 +274,7 @@ while True:
     # Mover os tiros dos inimigos
     mover_tiros_inimigos()
 
-    # Verificar se o jogador foi atingido
-    if verifica_colisao_tiro_inimigo():
-        break  # Se o jogador for atingido, termina o jogo
+   
 
     # Preencher e mostrar a tela
     preencher_tela(tela, altura, largura, inimigos)
@@ -293,6 +283,10 @@ while True:
     # Verifica vitória
     if checar_vitoria():
         break
+        
+     # Verificar se o jogador foi atingido
+    if verifica_colisao_tiro_inimigo():
+        break  # Se o jogador for atingido, termina o jogo    
 
     # Verifica derrota por colisão com inimigo vertical
     if checar_derrota():
