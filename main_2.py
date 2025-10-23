@@ -68,13 +68,27 @@ def mostrar_tela(tela, altura, largura, acertos):
     print(f"Acertos: {acertos}/50")
 
 # Retorna True caso o tiro acerte em um inimigo
-def verifica_colisao(tiro_x, tiro_y, inimigos):
+def verifica_colisao(tiro_x, tiro_y, inimigos, inimigos_horizontais):
     global acertos, powerup_x, powerup_y
     if (tiro_x, tiro_y) in inimigos:
         inimigos.remove((tiro_x, tiro_y))
         powerup_x, powerup_y = powerup(powerup_x, powerup_y)
         acertos += 1
         tiro_y = -1
+    elif (tiro_x, tiro_y) in inimigos_horizontais :
+        inimigos_horizontais.remove((tiro_x, tiro_y))
+        powerup_x, powerup_y = powerup(powerup_x, powerup_y)
+        acertos += 1
+        tiro_y = -1            
+
+# Verifica a colisão do tiro ao inimigo que surge da horizontal
+def verifica_colisao_2(tiro_x, tiro_y, inimigos_horizontais):
+    global acertos, powerup_x, powerup_y
+    if (tiro_x, tiro_y) in inimigos_horizontais:
+        inimigos.remove((tiro_x, tiro_y))
+        powerup_x, powerup_y = powerup(powerup_x, powerup_y)
+        acertos += 1
+        tiro_y = -1        
 
 def verifica_coleta(powerup_x, powerup_y):
     if powerup_x == aviao_x and powerup_y == aviao_y:
@@ -181,6 +195,8 @@ def novos_inimigos(inimigos):
     if inimigos == []:
         return[(3, 0),(17, 0),(20, 0),(22, 0),(25, 0)]
     return inimigos
+ 
+
 
 # Mover inimigos horizontais
 def mover_inimigos_horizontais(cont):
@@ -243,7 +259,9 @@ while True:
     tiro_y = mover(False, tiro_y, 1, tiro_y >= 0, -1)
 
     # Verifica colisão do tiro do jogador com inimigos verticais
-    verifica_colisao(tiro_x, tiro_y, inimigos)
+    verifica_colisao(tiro_x, tiro_y, inimigos,inimigos_horizontais)
+    
+   
 
     # Mover power-up
     powerup_y = mover(False, powerup_y, 20, powerup_y != -1)
@@ -279,3 +297,4 @@ while True:
     # Verifica derrota por colisão com inimigo vertical
     if checar_derrota():
         break
+
