@@ -11,8 +11,7 @@ def jogo():
     aviao_x = largura // 2
     tiro_y = -1
     tiro_x = -1
-    dinheiro_y = -1
-    dinheiro_x = -1
+    dinheiros = []
     dinheiro = 0
 
     # Cada inimigo é uma tupla (x, y)
@@ -52,7 +51,7 @@ def jogo():
                     tela[y][x] = "|"
                 elif y == aviao_y and x == aviao_x:
                     tela[y][x] = "^"
-                elif y == dinheiro_y and x == dinheiro_x:
+                elif (x, y) in dinheiros:
                     tela[y][x] = "$"
                 else:
                     tela[y][x] = " "
@@ -70,23 +69,22 @@ def jogo():
 
     # Retorna True caso o tiro acerte em um inimigo
     def verifica_colisao(tiro_x, tiro_y, inimigos):
-        nonlocal acertos, dinheiro_x, dinheiro_y
+        nonlocal acertos, dinheiros
         if (tiro_x, tiro_y) in inimigos:
             inimigos.remove((tiro_x, tiro_y))
-            dinheiro_x, dinheiro_y = spawn_dinheiro(dinheiro_x, dinheiro_y)
+            dinheiros.append((tiro_x,tiro_y))
             acertos += 1
             tiro_y = -1
 
-    def verifica_coleta(dinheiro_x, dinheiro_y):
+    def verifica_coleta(dinheiros):
         nonlocal dinheiro
-        if dinheiro_x == aviao_x and dinheiro_y == aviao_y:
-            dinheiro += 1
-            return -1, -1
-        return dinheiro_x, dinheiro_y
-
-    def spawn_dinheiro(x, y):
-        x, y = tiro_x, tiro_y
-        return x, y
+        print(dinheiros)
+        if len(dinheiros) > 0:
+            for (x, y) in dinheiros:
+                if x == aviao_x and y == aviao_y:
+                    (x, y) = (x, y + 1)
+                    return (-1, -1)
+        else: return dinheiros
 
     def checar_vitoria():
         if acertos >= 50:
@@ -102,7 +100,7 @@ def jogo():
 
     def entrada_jogador():
         nonlocal aviao_x, aviao_y, tiro_x, tiro_y, altura, largura
-        print(f"a,→ d,← w,↑ s,↓ f=fogo.", f"{dinheiro}R$")
+        #print(f"a,→ d,← w,↑ s,↓ f=fogo.", f"{dinheiro}R$")
         if WConio2.kbhit():
             codigo, simbolo = WConio2.getch()
             print(codigo, " ", simbolo)  # descobre o codigo da tecla pressionada
@@ -204,13 +202,6 @@ def jogo():
 
             inimigos_horizontais[i] = (x + direcao, y)
 
-    # Inimigos atiram
-    def inimigos_atiram():
-        nonlocal tiros_inimigos
-        if cont % 1000 == 0:  # Cada ciclos os inimigos atiram
-            for (x, y) in inimigos_horizontais:
-                tiros_inimigos.append((x, y + 1))  # Tiros dos inimigos (para baixo)
-
     # Mover tiros dos inimigos
     def mover_tiros_inimigos():
         nonlocal tiros_inimigos
@@ -224,6 +215,23 @@ def jogo():
             if y < altura - 1:
                 novos_tiros.append((x, y + 1))  # move para baixo
         tiros_inimigos[:] = novos_tiros
+
+    def mover_dinheiro(dinheiros):
+        if len(dinheiros) == 0:
+            return dinheiros
+        for d in dinheiros:
+            if d != (-1, -1):
+                if cont % 20:
+                    return dinheiros[1] + 1
+            else: return
+
+
+    # Inimigos atiram
+    def inimigos_atiram():
+        nonlocal tiros_inimigos
+        if cont % 1000 == 0:  # Cada ciclos os inimigos atiram
+            for (x, y) in inimigos_horizontais:
+                tiros_inimigos.append((x, y + 1))  # Tiros dos inimigos (para baixo)
 
     # Verificar colisão do tiro inimigo com o avião
     def verifica_colisao_tiro_inimigo():
@@ -248,9 +256,9 @@ def jogo():
         # Verifica colisão do tiro do jogador com inimigos verticais
         verifica_colisao(tiro_x, tiro_y, inimigos)
 
-        # Mover power-up
-        dinheiro_y = mover(False, dinheiro_y, 20, dinheiro_y != -1)
-        dinheiro_x, dinheiro_y = verifica_coleta(dinheiro_x, dinheiro_y)
+        # Move e verifica colisão do dinheiro
+        dinheiros = mover_dinheiro(dinheiros)
+        dinheiros = verifica_coleta(dinheiros)
 
         # Mover inimigos verticais
         inimigos = mover_inimigos(cont, inimigos)
