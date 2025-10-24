@@ -1,6 +1,8 @@
 import os
 import WConio2  # pip install WConio2
 import random
+import menu
+
 def jogo():
     tela = []
     cont = 0
@@ -12,14 +14,16 @@ def jogo():
     tiro_y = -1
     tiro_x = -1
     dinheiros = []
-    dinheiro = 0
+    moedas = 0
 
     # Cada inimigo é uma tupla (x, y)
-    inimigos = [(5, 0), (10, 0), (15, 0), (7, 0), (12, 0), (16, 0)]
+    inimigos = [(5, 0), (10, 0), (15, 0), (7, 0), (12, 0)]
     inimigos_horizontais = [(0, 5), (3, 8)]  # inimigos horizontais
     direcao_horizontais = [1, 1]  
     tiros_inimigos = []  # tiros inimigos
     acertos = 0
+    acertos_p_vencer = 30
+    onda = 0
 
     # Criar função para tirar o pisca-pisca
     def gotoxy(x, y):
@@ -51,7 +55,7 @@ def jogo():
                     tela[y][x] = "|"
                 elif y == aviao_y and x == aviao_x:
                     tela[y][x] = "^"
-                elif (x, y) in dinheiros:
+                elif [x, y] in dinheiros:
                     tela[y][x] = "$"
                 else:
                     tela[y][x] = " "
@@ -65,45 +69,49 @@ def jogo():
                 print(tela[x][y], end='')
             print("*")
         print("*" * (largura + 2))
-        print(f"Acertos: {acertos}/50")
+        print(f"Acertos: {acertos}/{acertos_p_vencer}")
 
     # Retorna True caso o tiro acerte em um inimigo
     def verifica_colisao(tiro_x, tiro_y, inimigos):
         nonlocal acertos, dinheiros
         if (tiro_x, tiro_y) in inimigos:
             inimigos.remove((tiro_x, tiro_y))
-            dinheiros.append((tiro_x,tiro_y))
+            dinheiros.append([tiro_x,tiro_y])
             acertos += 1
             tiro_y = -1
 
     def verifica_coleta(dinheiros):
-        nonlocal dinheiro
-        print(dinheiros)
+        nonlocal moedas
         if len(dinheiros) > 0:
-            for (x, y) in dinheiros:
-                if x == aviao_x and y == aviao_y:
-                    (x, y) = (x, y + 1)
-                    return (-1, -1)
+            for i in dinheiros:
+                if i[0] == aviao_x and i[1] == aviao_y:
+                    moedas += 1
+                    dinheiros.remove(i)
+                    return dinheiros
+            return dinheiros
         else: return dinheiros
 
     def checar_vitoria():
-        if acertos >= 50:
-            print("Você venceu com 50 acertos!")
+        if acertos >= acertos_p_vencer:
+            print(f"Você venceu com {acertos_p_vencer} acertos!  ")
             return True
         return False
 
     def checar_derrota():
+        esperar = 0
         if any(y == aviao_y and x == aviao_x for (x, y) in inimigos) or any(y == altura - 1 for (x, y) in inimigos):
             print("Você foi atingido! Game Over.")
+            while esperar < 10000000:
+                esperar += 1
             return True
         return False
 
     def entrada_jogador():
         nonlocal aviao_x, aviao_y, tiro_x, tiro_y, altura, largura
-        #print(f"a,→ d,← w,↑ s,↓ f=fogo.", f"{dinheiro}R$")
+        print(f"a,→ d,← w,↑ s,↓ f=fogo.", f"{moedas}R$")
         if WConio2.kbhit():
             codigo, simbolo = WConio2.getch()
-            print(codigo, " ", simbolo)  # descobre o codigo da tecla pressionada
+            #print(codigo, " ", simbolo)  # descobre o codigo da tecla pressionada
 
             def aviao_esquerda(aviao_x):
                 if aviao_x > 0:
@@ -179,14 +187,21 @@ def jogo():
         return inimigos
 
     def novos_inimigos(inimigos):
+        nonlocal onda
         if inimigos == []:
-            return[(3, 0),(17, 0),(20, 0),(22, 0),(25, 0)]
+            onda +=1
+            match onda:
+                case 1:return[(3, 0),(5, 0),(7, 0),(9, 0),(11, 0)]
+                case 2:return[(2, 0),(4, 0),(6, 0),(8, 0),(10, 0)]
+                case 3:return[(1, 0),(3, 0),(5, 0),(7, 0),(9, 0)]
+                case 4:return[(2, 0),(4, 0),(6, 0),(8, 0),(10, 0)]
+                case 5:return[(3, 0),(5, 0),(7, 0),(9, 0),(11, 0)]
         return inimigos
 
     # Mover inimigos horizontais
     def mover_inimigos_horizontais(cont):
         nonlocal inimigos_horizontais, direcao_horizontais
-        VELOCIDADE_HORIZONTAL = 50  # Quanto maior, mais lento
+        VELOCIDADE_HORIZONTAL = acertos_p_vencer  # Quanto maior, mais lento
 
         if cont % VELOCIDADE_HORIZONTAL != 0:
             return  # Só move a cada 200 ciclos
@@ -217,14 +232,11 @@ def jogo():
         tiros_inimigos[:] = novos_tiros
 
     def mover_dinheiro(dinheiros):
-        if len(dinheiros) == 0:
-            return dinheiros
-        for d in dinheiros:
-            if d != (-1, -1):
-                if cont % 20:
-                    return dinheiros[1] + 1
-            else: return
-
+        if len(dinheiros) > 0:
+            if cont % 30 == 0:
+                for d in dinheiros:
+                    if d[1] > altura: dinheiros.remove(d)
+                    d[1] += 1
 
     # Inimigos atiram
     def inimigos_atiram():
@@ -257,7 +269,7 @@ def jogo():
         verifica_colisao(tiro_x, tiro_y, inimigos)
 
         # Move e verifica colisão do dinheiro
-        dinheiros = mover_dinheiro(dinheiros)
+        mover_dinheiro(dinheiros)
         dinheiros = verifica_coleta(dinheiros)
 
         # Mover inimigos verticais
@@ -285,11 +297,11 @@ def jogo():
 
         # Verifica vitória
         if checar_vitoria():
-            break
+            menu.menu()
 
         # Verifica derrota por colisão com inimigo vertical
         if checar_derrota():
-            break
+            menu.menu()
 
 # vai ser esquema de niveis e a cada nivel aparece um menu e o jogador decide só continuar ou melhorar a nave antes
 # cada nivel vai ter ondas de inimigos. o nivel 1 vai ter 5 ondas de 5 inimigos

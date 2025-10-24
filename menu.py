@@ -1,5 +1,6 @@
 import os
 import WConio2
+from jogo import jogo 
 
 def menu():
     #função para mudar o local do cursor
@@ -171,7 +172,11 @@ def menu():
 
         #== CAPTURA INPUT DO JOGADOR ==
         codigo = CapturaInput(codigo)
-        if codigo == 13: break
+
+        # se ENTER for apertado e a seta estiver em CONTINUAR
+        if codigo == 13 and y_seta == 9: break
+        # se ENTER or apertado e a seta estiver em NOVO JOGO
+        if codigo == 13 and y_seta == 11: break
 
         #== MUDA A POSICAO DA SETA SEGUNDO INPUT ==
         y_seta = MudaCoordenadaYSetaIndicadora(codigo, y_seta, x_seta, y_continuar, y_melhorias)
