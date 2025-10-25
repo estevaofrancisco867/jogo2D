@@ -16,8 +16,9 @@ powerup_x = -1
 
 # Cada inimigo é uma tupla (x, y)
 inimigos = [(5, 0), (10, 0), (15, 0), (7, 0), (12, 0), (16, 0)]
-inimigos_horizontais = [(0, 5), (3, 8)]  # inimigos horizontais
-direcao_horizontais = [1, 1]  
+inimigos_horizontais = [(0, 5), (3, 8), (6, 10), (10, 12)]  # agora 4 aviões
+direcao_horizontais = [1, 1, 1, 1]  # direção inicial de todos
+
 tiros_inimigos = []  # tiros inimigos
 acertos = 0
 
@@ -183,11 +184,17 @@ def mover_inimigos(cont, inimigos):
         return [(x, y + 1) for (x, y) in inimigos if y + 1 < altura]
     return inimigos
 
-def novos_inimigos(inimigos):
+def novos_inimigos(inimigos, inimigos_horizontais):
+    # Recriar inimigos verticais se todos forem destruídos
     if inimigos == []:
-        return[(3, 0),(17, 0),(20, 0),(22, 0),(25, 0)]
-    return inimigos
- 
+        inimigos = [(3, 0), (17, 0), (20, 0), (22, 0), (25, 0)]
+    
+    # Recriar inimigos horizontais se todos forem destruídos
+    if inimigos_horizontais == []:
+        inimigos_horizontais = [(0, 5), (3, 8), (6, 10), (10, 12), (14, 14)]
+    
+    return inimigos, inimigos_horizontais
+
 
 
 # Mover inimigos horizontais
@@ -263,7 +270,8 @@ while True:
     inimigos = mover_inimigos(cont, inimigos)
 
     # Recria inimigos verticais se forem todos destruídos
-    inimigos = novos_inimigos(inimigos)
+    inimigos, inimigos_horizontais = novos_inimigos(inimigos, inimigos_horizontais)
+
 
     # Mover inimigos horizontais
     mover_inimigos_horizontais(cont)
