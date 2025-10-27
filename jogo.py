@@ -19,10 +19,10 @@ def jogo():
     # Cada inimigo é uma tupla (x, y)
     inimigos = [(5, 0), (10, 0), (15, 0), (7, 0), (12, 0)]
     inimigos_horizontais = [(0, 5), (3, 8)]  # inimigos horizontais
-    direcao_horizontais = [1, 1]  
+    direcao_horizontais = [1, 1, 1, 1]  
     tiros_inimigos = []  # tiros inimigos
     acertos = 0
-    acertos_p_vencer = 30
+    acertos_p_vencer = 90
     onda = 0
 
     # Criar função para tirar o pisca-pisca
@@ -72,13 +72,19 @@ def jogo():
         print(f"Acertos: {acertos}/{acertos_p_vencer}")
 
     # Retorna True caso o tiro acerte em um inimigo
-    def verifica_colisao(tiro_x, tiro_y, inimigos):
+    def verifica_colisao(tiro_x, tiro_y, inimigos,inimigos_horizontais):
         nonlocal acertos, dinheiros
         if (tiro_x, tiro_y) in inimigos:
             inimigos.remove((tiro_x, tiro_y))
             dinheiros.append([tiro_x,tiro_y])
             acertos += 1
             tiro_y = -1
+        elif (tiro_x, tiro_y) in inimigos_horizontais :
+            inimigos_horizontais.remove((tiro_x, tiro_y))
+            dinheiros.append([tiro_x,tiro_y])
+            acertos += 1
+            tiro_y = -1      
+
 
     def verifica_coleta(dinheiros):
         nonlocal moedas
@@ -91,27 +97,34 @@ def jogo():
             return dinheiros
         else: return dinheiros
 
-    def checar_vitoria():
+    def checar_vitoria(acertos):
         if acertos >= acertos_p_vencer:
             print(f"Você venceu com {acertos_p_vencer} acertos!  ")
+            acertos = 0
+            while esperar < 100000000:
+                esperar += 1
             return True
         return False
 
     def checar_derrota():
         esperar = 0
+        perdeu = False
         if any(y == aviao_y and x == aviao_x for (x, y) in inimigos) or any(y == altura - 1 for (x, y) in inimigos):
             print("Você foi atingido! Game Over.")
-            while esperar < 10000000:
+            perdeu = True
+        if any(y == aviao_y and x == aviao_x for (x, y) in inimigos_horizontais) or any(y == altura - 1 for (x, y) in inimigos_horizontais):
+            print("Você foi atingido! Game Over.")        
+            perdeu = True
+        if perdeu:
+            while esperar < 100000000:
                 esperar += 1
-            return True
-        return False
-
+        return perdeu
     def entrada_jogador():
         nonlocal aviao_x, aviao_y, tiro_x, tiro_y, altura, largura
         print(f"a,→ d,← w,↑ s,↓ f=fogo.", f"{moedas}R$")
         if WConio2.kbhit():
             codigo, simbolo = WConio2.getch()
-            #print(codigo, " ", simbolo)  # descobre o codigo da tecla pressionada
+            print(codigo, " ", simbolo)  # descobre o codigo da tecla pressionada
 
             def aviao_esquerda(aviao_x):
                 if aviao_x > 0:
@@ -158,6 +171,9 @@ def jogo():
                 case 80: aviao_y = aviao_baixo(aviao_y, altura)
                 case 102: tiro_x, tiro_y = atirar(tiro_x, tiro_y)  # f
                 case 32: tiro_x, tiro_y = atirar(tiro_x, tiro_y)  # espaço
+                case 27: 
+                    menu.menu()
+                    return True
 
     def mover(x, y, intervalo=1, condicao=True, direcao=1):
         if y is not False and x is not False:
@@ -186,22 +202,29 @@ def jogo():
             return [(x, y + 1) for (x, y) in inimigos if y + 1 < altura]
         return inimigos
 
-    def novos_inimigos(inimigos):
-        nonlocal onda
-        if inimigos == []:
-            onda +=1
-            match onda:
-                case 1:return[(3, 0),(5, 0),(7, 0),(9, 0),(11, 0)]
-                case 2:return[(2, 0),(4, 0),(6, 0),(8, 0),(10, 0)]
-                case 3:return[(1, 0),(3, 0),(5, 0),(7, 0),(9, 0)]
-                case 4:return[(2, 0),(4, 0),(6, 0),(8, 0),(10, 0)]
-                case 5:return[(3, 0),(5, 0),(7, 0),(9, 0),(11, 0)]
-        return inimigos
+    # def novos_inimigos():
+    #     nonlocal onda
+    #     # Recriar inimigos verticais se todos forem destruídos
+    #     novos_inimigos = inimigos
+    #     if novos_inimigos == []:
+    #         onda +=1
+    #         match onda:
+    #             case 1:novos_inimigos = [(3, 0),(5, 0),(7, 0),(9, 0),(11, 0)]
+    #             case 2:novos_inimigos = [(2, 0),(4, 0),(6, 0),(8, 0),(10, 0)]
+    #             case 3:novos_inimigos = [(1, 0),(3, 0),(5, 0),(7, 0),(9, 0)]
+    #             case 4:novos_inimigos = [(2, 0),(4, 0),(6, 0),(8, 0),(10, 0)]
+    #             case 5:novos_inimigos = [(3, 0),(5, 0),(7, 0),(9, 0),(11, 0)]
+    
+    #     # Recriar inimigos horizontais se todos forem destruídos
+    #     if inimigos_horizontais == []:
+    #         inimigos_horizontais = [(0, 5), (3, 8), (6, 10)]
+        
+    #     return inimigos, inimigos_horizontais
 
     # Mover inimigos horizontais
     def mover_inimigos_horizontais(cont):
         nonlocal inimigos_horizontais, direcao_horizontais
-        VELOCIDADE_HORIZONTAL = acertos_p_vencer  # Quanto maior, mais lento
+        VELOCIDADE_HORIZONTAL = 50  # Quanto maior, mais lento
 
         if cont % VELOCIDADE_HORIZONTAL != 0:
             return  # Só move a cada 200 ciclos
@@ -258,7 +281,7 @@ def jogo():
 
     while True:
         cont += 1
-        entrada_jogador()
+        if entrada_jogador(): break
 
         gotoxy(0, 0)
 
@@ -266,7 +289,7 @@ def jogo():
         tiro_y = mover(False, tiro_y, 1, tiro_y >= 0, -1)
 
         # Verifica colisão do tiro do jogador com inimigos verticais
-        verifica_colisao(tiro_x, tiro_y, inimigos)
+        verifica_colisao(tiro_x, tiro_y, inimigos,inimigos_horizontais)
 
         # Move e verifica colisão do dinheiro
         mover_dinheiro(dinheiros)
@@ -276,7 +299,7 @@ def jogo():
         inimigos = mover_inimigos(cont, inimigos)
 
         # Recria inimigos verticais se forem todos destruídos
-        inimigos = novos_inimigos(inimigos)
+        inimigos,inimigos_horizontais = novos_inimigos(inimigos,inimigos_horizontais)
 
         # Mover inimigos horizontais
         mover_inimigos_horizontais(cont)
@@ -296,13 +319,13 @@ def jogo():
         mostrar_tela(tela, altura, largura, acertos)
 
         # Verifica vitória
-        if checar_vitoria():
+        if checar_vitoria(acertos):
             menu.menu()
+            break
 
         # Verifica derrota por colisão com inimigo vertical
         if checar_derrota():
             menu.menu()
+            break
 
 # vai ser esquema de niveis e a cada nivel aparece um menu e o jogador decide só continuar ou melhorar a nave antes
-# cada nivel vai ter ondas de inimigos. o nivel 1 vai ter 5 ondas de 5 inimigos
-#       inimigos.append((random.randint(1, largura - 1),0))

@@ -5,4 +5,4 @@ import menu
 import jogo
 
 menu.menu()
-jogo.jogo()
+

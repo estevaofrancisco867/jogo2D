@@ -6,7 +6,6 @@ def menu():
     #função para mudar o local do cursor
     def gotoxy(x, y):
         print(f"\033[{y};{x}H", end='', flush=True)
-
     #função para criar tela(matriz)
     def CriarTela(altura_y, largura_x, tela, item):
         for y in range(altura_y):
@@ -107,7 +106,6 @@ def menu():
         elif y_seta < y_melhorias and (codigo == 115 or codigo == 83 or codigo == 80):
             y_seta += 2
         return y_seta
-
     
 
     '''
@@ -173,10 +171,17 @@ def menu():
         #== CAPTURA INPUT DO JOGADOR ==
         codigo = CapturaInput(codigo)
 
+        if codigo == 27: 
+            os.system("cls")
+            break
         # se ENTER for apertado e a seta estiver em CONTINUAR
-        if codigo == 13 and y_seta == 9: break
+        if codigo == 13 and y_seta == 9:
+            jogo()
+            break
         # se ENTER or apertado e a seta estiver em NOVO JOGO
-        if codigo == 13 and y_seta == 11: break
+        if codigo == 13 and y_seta == 11:
+            jogo()
+            break
 
         #== MUDA A POSICAO DA SETA SEGUNDO INPUT ==
         y_seta = MudaCoordenadaYSetaIndicadora(codigo, y_seta, x_seta, y_continuar, y_melhorias)
