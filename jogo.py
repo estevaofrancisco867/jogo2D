@@ -1,13 +1,13 @@
 import os
 import WConio2  # pip install WConio2
-import random
+import menu_melhorias
 import menu
 
 def jogo():
     tela = []
     cont = 0
-    largura = 50
-    altura = 45
+    largura = 200
+    altura = 50
 
     aviao_y = altura - 1
     aviao_x = largura // 2
@@ -22,7 +22,7 @@ def jogo():
     direcao_horizontais = [1, 1, 1, 1]  
     tiros_inimigos = []  # tiros inimigos
     acertos = 0
-    acertos_p_vencer = 90
+    acertos_p_vencer = 10
     onda = 0
 
     # Criar função para tirar o pisca-pisca
@@ -98,6 +98,7 @@ def jogo():
         else: return dinheiros
 
     def checar_vitoria(acertos):
+        esperar = 0
         if acertos >= acertos_p_vencer:
             print(f"Você venceu com {acertos_p_vencer} acertos!  ")
             acertos = 0
@@ -202,24 +203,23 @@ def jogo():
             return [(x, y + 1) for (x, y) in inimigos if y + 1 < altura]
         return inimigos
 
-    # def novos_inimigos():
-    #     nonlocal onda
-    #     # Recriar inimigos verticais se todos forem destruídos
-    #     novos_inimigos = inimigos
-    #     if novos_inimigos == []:
-    #         onda +=1
-    #         match onda:
-    #             case 1:novos_inimigos = [(3, 0),(5, 0),(7, 0),(9, 0),(11, 0)]
-    #             case 2:novos_inimigos = [(2, 0),(4, 0),(6, 0),(8, 0),(10, 0)]
-    #             case 3:novos_inimigos = [(1, 0),(3, 0),(5, 0),(7, 0),(9, 0)]
-    #             case 4:novos_inimigos = [(2, 0),(4, 0),(6, 0),(8, 0),(10, 0)]
-    #             case 5:novos_inimigos = [(3, 0),(5, 0),(7, 0),(9, 0),(11, 0)]
-    
-    #     # Recriar inimigos horizontais se todos forem destruídos
-    #     if inimigos_horizontais == []:
-    #         inimigos_horizontais = [(0, 5), (3, 8), (6, 10)]
-        
-    #     return inimigos, inimigos_horizontais
+    def novos_inimigos(inimigos,inimigos_horizontais):
+        nonlocal onda
+        # Recriar todos os inimigos se todos forem destruídos
+        if inimigos == [] and inimigos_horizontais == []:
+            onda +=1
+            match onda:
+                case 1:
+                    return[(3, 0),(5, 0),(7, 0),(9, 0),(11, 0)],[(0, 5), (3, 8), (6, 10),(0, 6), (2, 8), (7, 10)]
+                case 2:
+                    return[(2, 0),(4, 0),(6, 0),(8, 0),(10, 0)],[(0, 5), (3, 8), (6, 10)]
+                case 3:
+                    return[(1, 0),(3, 0),(5, 0),(7, 0),(9, 0)],[(0, 5), (3, 8), (6, 10)]
+                case 4:
+                    return[(2, 0),(4, 0),(6, 0),(8, 0),(10, 0)],[(0, 5), (3, 8), (6, 10)]
+                case 5:
+                    return[(3, 0),(5, 0),(7, 0),(9, 0),(11, 0)],[(0, 5), (3, 8), (6, 10)]
+        return inimigos, inimigos_horizontais
 
     # Mover inimigos horizontais
     def mover_inimigos_horizontais(cont):
@@ -228,7 +228,10 @@ def jogo():
 
         if cont % VELOCIDADE_HORIZONTAL != 0:
             return  # Só move a cada 200 ciclos
-
+        while len(inimigos_horizontais) > len(direcao_horizontais):
+            direcao_horizontais.append(1)
+        while len(inimigos_horizontais) < len(direcao_horizontais):
+            direcao_horizontais.pop()
         for i in range(len(inimigos_horizontais)):
             x, y = inimigos_horizontais[i]
             direcao = direcao_horizontais[i]
@@ -320,7 +323,7 @@ def jogo():
 
         # Verifica vitória
         if checar_vitoria(acertos):
-            menu.menu()
+            menu_melhorias.menu_melhorias()
             break
 
         # Verifica derrota por colisão com inimigo vertical
