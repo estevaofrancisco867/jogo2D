@@ -7,7 +7,7 @@ def jogo():
     tela = []
     cont = 0
     largura = 200
-    altura = 50
+    altura = 40
 
     aviao_y = altura - 1
     aviao_x = largura // 2

@@ -1,6 +1,6 @@
 import os
 import WConio2
-from jogo import jogo 
+import middleware
 
 def menu_melhorias():
     #função para mudar o local do cursor
@@ -176,11 +176,9 @@ def menu_melhorias():
             break
         # se ENTER for apertado e a seta estiver em CONTINUAR
         if codigo == 13 and y_seta == 9:
-            jogo()
             break
         # se ENTER or apertado e a seta estiver em NOVO JOGO
         if codigo == 13 and y_seta == 11:
-            jogo()
             break
 
         #== MUDA A POSICAO DA SETA SEGUNDO INPUT ==

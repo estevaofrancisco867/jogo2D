@@ -1,6 +1,6 @@
 import os
 import WConio2
-from jogo import jogo 
+from middleware import middleware
 
 def menu():
     #função para mudar o local do cursor
@@ -120,8 +120,8 @@ def menu():
     item = " "
 
     # espeficações tela
-    altura_y = 35
-    largura_x = 50
+    altura_y = 40
+    largura_x = 200
 
     #coordenadas iniciais titulo
     y_titulo = 7     #coordenada y inicial do primeiro item esquerdo do nome do jogo
@@ -171,16 +171,23 @@ def menu():
         #== CAPTURA INPUT DO JOGADOR ==
         codigo = CapturaInput(codigo)
 
+        # se ESC for apertado
         if codigo == 27: 
             os.system("cls")
             break
+
         # se ENTER for apertado e a seta estiver em CONTINUAR
         if codigo == 13 and y_seta == 9:
-            jogo()
+            middleware("jogo")
             break
+
         # se ENTER or apertado e a seta estiver em NOVO JOGO
         if codigo == 13 and y_seta == 11:
-            jogo()
+            middleware("jogo")
+            break
+
+        if codigo == 13 and y_seta == 13:
+            middleware("menu_melhorias")
             break
 
         #== MUDA A POSICAO DA SETA SEGUNDO INPUT ==
