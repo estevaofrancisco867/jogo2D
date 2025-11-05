@@ -1,11 +1,9 @@
 import jogo
 import menu_melhorias
 import menu
-# def middleware():
-#     jogo.jogo()
-#     menu.menu()
-#     menu_melhorias.menu_melhorias()
 
+#middleware é um arquivo entre outros
+#para ir para o jogo ou um menu, rodar middleware("jogo")
 def middleware(caminho):
     if caminho == "jogo":
         jogo.jogo()
@@ -13,4 +11,4 @@ def middleware(caminho):
         menu_melhorias.menu_melhorias()
     elif caminho == "menu":
         menu.menu()
-    else: print("nome do arquivo errado, middleware(erro aqui)")
+    else: print("nome do arquivo errado, middleware(erro aqui!)")
