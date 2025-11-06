@@ -9,12 +9,22 @@ def jogo():
     largura = 200
     altura = 40
 
-    aviao_y = altura - 1
+    aviao_y = altura - 20
     aviao_x = largura // 2
     tiro_y = -1
     tiro_x = -1
     dinheiros = []
     moedas = 0
+    desenho_aviao = [
+"          ██         ",
+"         ████        ",
+"        ██████       ",
+"        ██  ██       ",
+"      ██████████     ",
+"   █  ██████████  █  ",
+"   ██████ ██ ██████  ",
+"   █  █  ████  █  █  "
+]
 
     # Cada inimigo é uma tupla (x, y)
     inimigos = [(5, 0), (10, 0), (15, 0), (7, 0), (12, 0)]
@@ -45,6 +55,9 @@ def jogo():
     def preencher_tela(tela, altura, largura, inimigos):
         for y in range(altura):
             for x in range(largura):
+                    tela[y][x] = " "
+        for y in range(altura):
+            for x in range(largura):
                 if (x, y) in inimigos:
                     tela[y][x] = "@"
                 elif (x, y) in inimigos_horizontais:
@@ -54,11 +67,13 @@ def jogo():
                 elif y == tiro_y and x == tiro_x:
                     tela[y][x] = "|"
                 elif y == aviao_y and x == aviao_x:
-                    tela[y][x] = "^"
+                    for a_y, linha in enumerate(desenho_aviao):
+                        for a_x, caractere in enumerate(linha):
+                            # if 0 <= aviao_y + a_y < len(tela) and 0 <= aviao_x + a_x < len(tela[0]):
+                                tela[a_y + aviao_y][a_x + aviao_x] = caractere
                 elif [x, y] in dinheiros:
                     tela[y][x] = "$"
-                else:
-                    tela[y][x] = " "
+
 
     # Mostra a tela, suas bordas * e os acertos
     def mostrar_tela(tela, altura, largura, acertos):

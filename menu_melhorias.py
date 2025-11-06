@@ -20,65 +20,36 @@ def menu_melhorias():
                 tela[y][x] = " "
 
     #função para desenhar na tela(matriz)
-    def DesenharTela(tela, y_titulo, esquerda_x_titulo, y_continuar, esquerda_x_continuar, y_novojogo, esquerda_x_novojogo, y_melhorias, esquerda_x_melhorias, y_seta, x_seta):
+    def DesenharTela(tela,  y_seta, x_seta):
         for y in range(altura_y):
             for x in range(largura_x):
-                #Desenha titulo
-                if y == y_titulo and x == esquerda_x_titulo:
-                    tela[y][x] = "S"
-                    tela[y][x+1] = "P"
-                    tela[y][x+2] = "A"
-                    tela[y][x+3] = "C"
-                    tela[y][x+4] = "E"
+                
+                #desenhos de dano, vida e vel. tiro
+                if y == y_dano and x == x_dano:
+                    for dy, linha in enumerate(desenho_dano):  
+                        for dx, caractere in enumerate(linha):      
+                            if 0 <= y_dano + dy < len(tela) and 0 <= x_dano + dx < len(tela[0]): # ve se o desenho ta dentro da tela
+                                tela[y_dano + dy][x_dano + dx] = caractere
 
-                    tela[y][x+6] = "I"
-                    tela[y][x+7] = "N"
-                    tela[y][x+8] = "V"
-                    tela[y][x+9] = "A"
-                    tela[y][x+10] = "D"
-                    tela[y][x+11] = "E"
-                    tela[y][x+12] = "R"
-                    tela[y][x+13] = "S"
+                if y == y_vida and x == x_vida:
+                    for vy, linha in enumerate(desenho_vida):  
+                        for vx, caractere in enumerate(linha):      
+                            if 0 <= y_vida + vy < len(tela) and 0 <= x_vida + vx < len(tela[0]): # ve se o desenho ta dentro da tela
+                                tela[y_vida + vy][x_vida + vx] = caractere
 
-                #Desenha continuar
-                if y == y_continuar and x == esquerda_x_continuar:
-                    tela[y][x] = "C"
-                    tela[y][x+1] = "O"
-                    tela[y][x+2] = "N"
-                    tela[y][x+3] = "T"
-                    tela[y][x+4] = "I"
-                    tela[y][x+5] = "N"
-                    tela[y][x+6] = "U"
-                    tela[y][x+7] = "A"
-                    tela[y][x+8] = "R"
-
-                #Desenha novo jogo
-                if y == y_novojogo and x == esquerda_x_novojogo:
-                    tela[y][x] = "N"
-                    tela[y][x+1] = "O"
-                    tela[y][x+2] = "V"
-                    tela[y][x+3] = "O"
-
-
-                    tela[y][x+5] = "J"
-                    tela[y][x+6] = "O"
-                    tela[y][x+7] = "G"
-                    tela[y][x+8] = "O"
-            
-                #Desenha melhorias
-                if y == y_melhorias and x == esquerda_x_melhorias:
-                    tela[y][x] = "M"
-                    tela[y][x+1] = "E"
-                    tela[y][x+2] = "L"
-                    tela[y][x+3] = "H"
-                    tela[y][x+4] = "O"
-                    tela[y][x+5] = "R"
-                    tela[y][x+6] = "I"
-                    tela[y][x+7] = "A"
-                    tela[y][x+8] = "S"
-            
+                if y == y_vel_tiro and x == x_vel_tiro:
+                    for vel_y, linha in enumerate(desenho_vel_tiro):  
+                        for vel_x, caractere in enumerate(linha):      
+                            if 0 <= y_vel_tiro + vel_y < len(tela) and 0 <= x_vel_tiro + vel_x < len(tela[0]): # ve se o desenho ta dentro da tela
+                                tela[y_vel_tiro + vel_y][x_vel_tiro + vel_x] = caractere
                 #Desenha seta
                 tela[y_seta][x_seta] = ">"
+
+                #desenha os limites da tela
+                tela[y][largura_x - 1] = "*"
+                tela[y][0] = "*"
+                tela[altura_y - 1][x] = "*"
+                tela[0][x] = "*"
 
 
     #função para colocar a tela(matriz) no terminal
@@ -120,8 +91,8 @@ def menu_melhorias():
     item = " "
 
     # espeficações tela
-    altura_y = 35
-    largura_x = 50
+    altura_y = 40
+    largura_x = 200
 
     #coordenadas iniciais titulo
     y_titulo = 7     #coordenada y inicial do primeiro item esquerdo do nome do jogo
@@ -138,8 +109,30 @@ def menu_melhorias():
     #coordenadas iniciais da Seta Indicadora no menu
     y_seta = 9
     x_seta = 19
-    # #estado:opção escolhida
-    # state = ""
+    y_vida, x_vida = [5,100] #eh o primeiro caractere de cima 
+    desenho_vida = [
+    "██╗   ██╗██╗██████╗  █████╗ ",
+    "██║   ██║██║██╔══██╗██╔══██╗",
+    "██║   ██║██║██║  ██║███████║",
+    "╚██╗ ██╔╝██║██║  ██║██╔══██║",
+    " ╚████╔╝ ██║██████╔╝██║  ██║",
+    "  ╚═══╝  ╚═╝╚═════╝ ╚═╝  ╚═╝"]
+    y_dano, x_dano = [15, 100]
+    desenho_dano = [
+    "██████╗  █████╗ ███╗   ██╗ ██████╗ ",
+    "██╔══██╗██╔══██╗████╗  ██║██╔═══██╗",
+    "██║  ██║███████║██╔██╗ ██║██║   ██║",
+    "██║  ██║██╔══██║██║╚██╗██║██║   ██║",
+    "██████╔╝██║  ██║██║ ╚████║╚██████╔╝",
+    "╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═══╝ ╚═════╝ "]
+    y_vel_tiro, x_vel_tiro = [30,100]
+    desenho_vel_tiro = [
+    "██╗   ██╗███████╗██╗         ████████╗██╗██████╗  ██████╗ ",
+    "██║   ██║██╔════╝██║         ╚══██╔══╝██║██╔══██╗██╔═══██╗",
+    "██║   ██║█████╗  ██║            ██║   ██║██████╔╝██║   ██║",
+    "╚██╗ ██╔╝██╔══╝  ██║            ██║   ██║██╔══██╗██║   ██║",
+    " ╚████╔╝ ███████╗███████╗██╗    ██║   ██║██║  ██║╚██████╔╝",
+    "  ╚═══╝  ╚══════╝╚══════╝╚═╝    ╚═╝   ╚═╝╚═╝  ╚═╝ ╚═════╝ "]
 
 
     # cria a tela
@@ -152,14 +145,12 @@ def menu_melhorias():
     codigo = 0
 
     while True:
-        altura_y = 35
-        largura_x = 50
 
         #== LIMPANDO TELA ==
         LimparTela(tela)
 
         #== DESENHAR O MENU NA TELA ==
-        DesenharTela(tela, y_titulo, esquerda_x_titulo, y_continuar, esquerda_x_continuar, y_novojogo, esquerda_x_novojogo, y_melhorias, esquerda_x_melhorias, y_seta, x_seta)
+        DesenharTela(tela, y_seta, x_seta)
 
         #== COLOCANDO A TELA NO TERMINAL ==
         gotoxy(0,0)
@@ -220,7 +211,7 @@ def menu_melhorias():
 █   █   █   █               █   █   █   █
 █████   █████               █████   █████
 '''
-'''
+r'''
                                                |                    
                                               / \                   
                                              /   \                  
@@ -273,4 +264,30 @@ vida, dano, vel tiro e dano tiro          /   ooo   \
                              /                                   \ 
                             <___________ _____________ ___________>
                                /___\         /___\         /___\   '''
-''''''
+
+
+
+"""
+ ██╗   ██╗██╗██████╗  █████╗ 
+ ██║   ██║██║██╔══██╗██╔══██╗
+ ██║   ██║██║██║  ██║███████║
+ ╚██╗ ██╔╝██║██║  ██║██╔══██║
+  ╚████╔╝ ██║██████╔╝██║  ██║
+   ╚═══╝  ╚═╝╚═════╝ ╚═╝  ╚═╝
+"""
+"""
+██████╗  █████╗ ███╗   ██╗ ██████╗ 
+██╔══██╗██╔══██╗████╗  ██║██╔═══██╗
+██║  ██║███████║██╔██╗ ██║██║   ██║
+██║  ██║██╔══██║██║╚██╗██║██║   ██║
+██████╔╝██║  ██║██║ ╚████║╚██████╔╝
+╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═══╝ ╚═════╝ 
+"""
+"""
+██╗   ██╗███████╗██╗         ████████╗██╗██████╗  ██████╗ 
+██║   ██║██╔════╝██║         ╚══██╔══╝██║██╔══██╗██╔═══██╗
+██║   ██║█████╗  ██║            ██║   ██║██████╔╝██║   ██║
+╚██╗ ██╔╝██╔══╝  ██║            ██║   ██║██╔══██╗██║   ██║
+ ╚████╔╝ ███████╗███████╗██╗    ██║   ██║██║  ██║╚██████╔╝
+  ╚═══╝  ╚══════╝╚══════╝╚═╝    ╚═╝   ╚═╝╚═╝  ╚═╝ ╚═════╝
+"""
