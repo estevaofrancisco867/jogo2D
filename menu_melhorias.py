@@ -1,6 +1,6 @@
 import os
 import WConio2
-import middleware
+import trocar_tela
 
 def menu_melhorias():
     #função para mudar o local do cursor
@@ -184,7 +184,6 @@ def menu_melhorias():
    █  ██████████  █  
    ██████ ██ ██████  
    █  █  ████  █  █  
-
 """
 
 '''

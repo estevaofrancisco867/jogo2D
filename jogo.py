@@ -1,13 +1,14 @@
 import os
 import WConio2  # pip install WConio2
-import menu_melhorias
-import menu
+import trocar_tela
+
+
 
 def jogo():
     tela = []
     cont = 0
     largura = 200
-    altura = 40
+    altura = 45
 
     aviao_y = altura - 20
     aviao_x = largura // 2
@@ -15,19 +16,18 @@ def jogo():
     tiro_x = -1
     dinheiros = []
     moedas = 0
-    desenho_aviao = [
-"          ██         ",
-"         ████        ",
-"        ██████       ",
-"        ██  ██       ",
-"      ██████████     ",
-"   █  ██████████  █  ",
-"   ██████ ██ ██████  ",
-"   █  █  ████  █  █  "
-]
-
+    sprite_aviao = [
+    "  █  ",
+    " █■█ ",
+    "█▀█▀█",
+    ]
+    sprite_inimigo = [
+    " █■█ ",
+    " █■█ ",
+    "█▀█▀█",
+    ]
     # Cada inimigo é uma tupla (x, y)
-    inimigos = [(5, 0), (10, 0), (15, 0), (7, 0), (12, 0)]
+    inimigos = [(5, 0), (30, 0), (50, 0), (75, 0), (90, 0)]
     inimigos_horizontais = [(0, 5), (3, 8)]  # inimigos horizontais
     direcao_horizontais = [1, 1, 1, 1]  
     tiros_inimigos = []  # tiros inimigos
@@ -59,7 +59,7 @@ def jogo():
         for y in range(altura):
             for x in range(largura):
                 if (x, y) in inimigos:
-                    tela[y][x] = "@"
+                    mostrar_sprite(sprite_inimigo,x,y)
                 elif (x, y) in inimigos_horizontais:
                     tela[y][x] = "&"
                 elif (x, y) in tiros_inimigos:
@@ -67,10 +67,7 @@ def jogo():
                 elif y == tiro_y and x == tiro_x:
                     tela[y][x] = "|"
                 elif y == aviao_y and x == aviao_x:
-                    for a_y, linha in enumerate(desenho_aviao):
-                        for a_x, caractere in enumerate(linha):
-                            # if 0 <= aviao_y + a_y < len(tela) and 0 <= aviao_x + a_x < len(tela[0]):
-                                tela[a_y + aviao_y][a_x + aviao_x] = caractere
+                    mostrar_sprite(sprite_aviao,aviao_x,aviao_y)
                 elif [x, y] in dinheiros:
                     tela[y][x] = "$"
 
@@ -85,6 +82,13 @@ def jogo():
             print("*")
         print("*" * (largura + 2))
         print(f"Acertos: {acertos}/{acertos_p_vencer}")
+
+    def mostrar_sprite(sprite,sprite_x,sprite_y):
+        nonlocal tela
+        for y, linha in enumerate(sprite):
+            for x, caractere in enumerate(linha):
+                if 0 <= aviao_y + y < len(tela) and 0 <= aviao_x + x < len(tela[0]): # ve se o inimigo ta dentro da tela
+                    tela[y + sprite_y][x + sprite_x] = caractere
 
     # Retorna True caso o tiro acerte em um inimigo
     def verifica_colisao(tiro_x, tiro_y, inimigos,inimigos_horizontais):
@@ -338,12 +342,12 @@ def jogo():
 
         # Verifica vitória
         if checar_vitoria(acertos):
-            menu_melhorias.menu_melhorias()
+            trocar_tela.trocar_tela("menu_melhorias")
             break
 
         # Verifica derrota por colisão com inimigo vertical
         if checar_derrota():
-            menu.menu()
+            trocar_tela.trocar_tela("menu")
             break
 
 # vai ser esquema de niveis e a cada nivel aparece um menu e o jogador decide só continuar ou melhorar a nave antes
