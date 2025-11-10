@@ -1,6 +1,6 @@
 import os
 import WConio2
-from trocar_tela import trocar_tela
+import trocar_tela
 
 def menu():
     #função para mudar o local do cursor
@@ -178,16 +178,16 @@ def menu():
 
         # se ENTER for apertado e a seta estiver em CONTINUAR
         if codigo == 13 and y_seta == 9:
-            trocar_tela("jogo")
+            trocar_tela.trocar_tela("jogo")
             break
 
         # se ENTER or apertado e a seta estiver em NOVO JOGO
         if codigo == 13 and y_seta == 11:
-            trocar_tela("jogo")
+            trocar_tela.trocar_tela("jogo")
             break
 
         if codigo == 13 and y_seta == 13:
-            trocar_tela("menu_melhorias")
+            trocar_tela.trocar_tela("menu_melhorias")
             break
 
         #== MUDA A POSICAO DA SETA SEGUNDO INPUT ==

@@ -1,6 +1,7 @@
 import os
 import WConio2  # pip install WConio2
 import trocar_tela
+import sprites
 
 
 
@@ -16,16 +17,7 @@ def jogo():
     tiro_x = -1
     dinheiros = []
     moedas = 0
-    sprite_aviao = [
-    "  █  ",
-    " █■█ ",
-    "█▀█▀█",
-    ]
-    sprite_inimigo = [
-    " █■█ ",
-    " █■█ ",
-    "█▀█▀█",
-    ]
+
     # Cada inimigo é uma tupla (x, y)
     inimigos = [(5, 0), (30, 0), (50, 0), (75, 0), (90, 0)]
     inimigos_horizontais = [(0, 5), (3, 8)]  # inimigos horizontais
@@ -59,17 +51,17 @@ def jogo():
         for y in range(altura):
             for x in range(largura):
                 if (x, y) in inimigos:
-                    mostrar_sprite(sprite_inimigo,x,y)
+                    mostrar_sprite(sprites.get_inimigo(),x,y)
                 elif (x, y) in inimigos_horizontais:
-                    tela[y][x] = "&"
+                    mostrar_sprite(sprites.get_inimigo_horizontal(),x,y)
                 elif (x, y) in tiros_inimigos:
                     tela[y][x] = "!"
                 elif y == tiro_y and x == tiro_x:
                     tela[y][x] = "|"
                 elif y == aviao_y and x == aviao_x:
-                    mostrar_sprite(sprite_aviao,aviao_x,aviao_y)
+                    mostrar_sprite(sprites.get_aviao(),aviao_x,aviao_y)
                 elif [x, y] in dinheiros:
-                    tela[y][x] = "$"
+                    mostrar_sprite(sprites.get_dinheiro(), x, y)
 
 
     # Mostra a tela, suas bordas * e os acertos
@@ -192,7 +184,7 @@ def jogo():
                 case 102: tiro_x, tiro_y = atirar(tiro_x, tiro_y)  # f
                 case 32: tiro_x, tiro_y = atirar(tiro_x, tiro_y)  # espaço
                 case 27: 
-                    menu.menu()
+                    trocar_tela.trocar_tela("menu")
                     return True
 
     def mover(x, y, intervalo=1, condicao=True, direcao=1):
@@ -243,7 +235,7 @@ def jogo():
     # Mover inimigos horizontais
     def mover_inimigos_horizontais(cont):
         nonlocal inimigos_horizontais, direcao_horizontais
-        VELOCIDADE_HORIZONTAL = 50  # Quanto maior, mais lento
+        VELOCIDADE_HORIZONTAL = 10  # Quanto maior, mais lento
 
         if cont % VELOCIDADE_HORIZONTAL != 0:
             return  # Só move a cada 200 ciclos

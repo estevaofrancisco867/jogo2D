@@ -1,6 +1,7 @@
 import os
 import WConio2
 import trocar_tela
+import sprites
 
 def menu_melhorias():
     #função para mudar o local do cursor
@@ -23,24 +24,31 @@ def menu_melhorias():
     def DesenharTela(tela,  y_seta, x_seta):
         for y in range(altura_y):
             for x in range(largura_x):
-                
-                #desenhos de dano, vida e vel. tiro
+
+                #sprite do foguete do menu
+                if y == y_foguete and x == x_foguete:
+                    for fy, linha in enumerate(sprites.get_foguete_menu()):
+                        for fx, caractere in enumerate(linha):
+                            if 0 <= y_foguete + fy < len(tela) and 0 <= x_foguete + fx < len(tela[0]): # ve se o sprite ta dentro da tela
+                                tela[y_foguete + fy][x_foguete + fx] = caractere
+
+                #sprites de dano, vida e vel. tiro
                 if y == y_dano and x == x_dano:
-                    for dy, linha in enumerate(desenho_dano):  
-                        for dx, caractere in enumerate(linha):      
-                            if 0 <= y_dano + dy < len(tela) and 0 <= x_dano + dx < len(tela[0]): # ve se o desenho ta dentro da tela
+                    for dy, linha in enumerate(sprites.get_dano()):  
+                        for dx, caractere in enumerate(linha):
+                            if 0 <= y_dano + dy < len(tela) and 0 <= x_dano + dx < len(tela[0]): # ve se o sprite ta dentro da tela
                                 tela[y_dano + dy][x_dano + dx] = caractere
 
                 if y == y_vida and x == x_vida:
-                    for vy, linha in enumerate(desenho_vida):  
-                        for vx, caractere in enumerate(linha):      
-                            if 0 <= y_vida + vy < len(tela) and 0 <= x_vida + vx < len(tela[0]): # ve se o desenho ta dentro da tela
+                    for vy, linha in enumerate(sprites.get_vida()):  
+                        for vx, caractere in enumerate(linha):
+                            if 0 <= y_vida + vy < len(tela) and 0 <= x_vida + vx < len(tela[0]): # ve se o sprite ta dentro da tela
                                 tela[y_vida + vy][x_vida + vx] = caractere
 
                 if y == y_vel_tiro and x == x_vel_tiro:
-                    for vel_y, linha in enumerate(desenho_vel_tiro):  
-                        for vel_x, caractere in enumerate(linha):      
-                            if 0 <= y_vel_tiro + vel_y < len(tela) and 0 <= x_vel_tiro + vel_x < len(tela[0]): # ve se o desenho ta dentro da tela
+                    for vel_y, linha in enumerate(sprites.get_vel_tiro()):  
+                        for vel_x, caractere in enumerate(linha):
+                            if 0 <= y_vel_tiro + vel_y < len(tela) and 0 <= x_vel_tiro + vel_x < len(tela[0]): # ve se o sprite ta dentro da tela
                                 tela[y_vel_tiro + vel_y][x_vel_tiro + vel_x] = caractere
                 #Desenha seta
                 tela[y_seta][x_seta] = ">"
@@ -71,11 +79,11 @@ def menu_melhorias():
             return codigo
 
     #função para mudar as coordenadas da seta indicadora na tela(matriz)
-    def MudaCoordenadaYSetaIndicadora(codigo, y_seta, x_seta, y_continuar, y_melhorias):
-        if y_seta > y_continuar and (codigo == 119 or codigo == 87 or codigo == 72):
-            y_seta -= 2
-        elif y_seta < y_melhorias and (codigo == 115 or codigo == 83 or codigo == 80):
-            y_seta += 2
+    def MudaCoordenadaYSetaIndicadora(codigo, y_seta, x_seta, y_vida, y_vel_tiro):
+        if y_seta > y_vida and (codigo == 119 or codigo == 87 or codigo == 72):
+            y_seta -= 10
+        elif y_seta < y_vel_tiro and (codigo == 115 or codigo == 83 or codigo == 80):
+            y_seta += 10
         return y_seta
     
 
@@ -98,41 +106,21 @@ def menu_melhorias():
     y_titulo = 7     #coordenada y inicial do primeiro item esquerdo do nome do jogo
     esquerda_x_titulo = 18     #coordenada x inicial da primeiro item esquerdo do nome do jogo
     #coordenadas iniciais CONTINUAR
-    y_continuar = 9
+    #y_vida = 9
     esquerda_x_continuar = 21
     #coordenadas iniciais NOVO JOGO
     y_novojogo = 11
     esquerda_x_novojogo = 21
     #coordenadas iniciais MELHORIAS
-    y_melhorias = 13
+    #y_vel_tiro = 13
     esquerda_x_melhorias = 21
     #coordenadas iniciais da Seta Indicadora no menu
-    y_seta = 9
-    x_seta = 19
-    y_vida, x_vida = [5,100] #eh o primeiro caractere de cima 
-    desenho_vida = [
-    "██╗   ██╗██╗██████╗  █████╗ ",
-    "██║   ██║██║██╔══██╗██╔══██╗",
-    "██║   ██║██║██║  ██║███████║",
-    "╚██╗ ██╔╝██║██║  ██║██╔══██║",
-    " ╚████╔╝ ██║██████╔╝██║  ██║",
-    "  ╚═══╝  ╚═╝╚═════╝ ╚═╝  ╚═╝"]
-    y_dano, x_dano = [15, 100]
-    desenho_dano = [
-    "██████╗  █████╗ ███╗   ██╗ ██████╗ ",
-    "██╔══██╗██╔══██╗████╗  ██║██╔═══██╗",
-    "██║  ██║███████║██╔██╗ ██║██║   ██║",
-    "██║  ██║██╔══██║██║╚██╗██║██║   ██║",
-    "██████╔╝██║  ██║██║ ╚████║╚██████╔╝",
-    "╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═══╝ ╚═════╝ "]
-    y_vel_tiro, x_vel_tiro = [30,100]
-    desenho_vel_tiro = [
-    "██╗   ██╗███████╗██╗         ████████╗██╗██████╗  ██████╗ ",
-    "██║   ██║██╔════╝██║         ╚══██╔══╝██║██╔══██╗██╔═══██╗",
-    "██║   ██║█████╗  ██║            ██║   ██║██████╔╝██║   ██║",
-    "╚██╗ ██╔╝██╔══╝  ██║            ██║   ██║██╔══██╗██║   ██║",
-    " ╚████╔╝ ███████╗███████╗██╗    ██║   ██║██║  ██║╚██████╔╝",
-    "  ╚═══╝  ╚══════╝╚══════╝╚═╝    ╚═╝   ╚═╝╚═╝  ╚═╝ ╚═════╝ "]
+    y_seta = 7
+    x_seta = 119
+    y_vida, x_vida = [5,120] #eh o primeiro caractere de cima 
+    y_dano, x_dano = [15, 120]
+    y_vel_tiro, x_vel_tiro = [25,120]
+    y_foguete, x_foguete = [5, 10]
 
 
     # cria a tela
@@ -173,7 +161,7 @@ def menu_melhorias():
             break
 
         #== MUDA A POSICAO DA SETA SEGUNDO INPUT ==
-        y_seta = MudaCoordenadaYSetaIndicadora(codigo, y_seta, x_seta, y_continuar, y_melhorias)
+        y_seta = MudaCoordenadaYSetaIndicadora(codigo, y_seta, x_seta, y_vida, y_vel_tiro)
 
 """
           ██         
@@ -265,28 +253,3 @@ vida, dano, vel tiro e dano tiro          /   ooo   \
                                /___\         /___\         /___\   '''
 
 
-
-"""
- ██╗   ██╗██╗██████╗  █████╗ 
- ██║   ██║██║██╔══██╗██╔══██╗
- ██║   ██║██║██║  ██║███████║
- ╚██╗ ██╔╝██║██║  ██║██╔══██║
-  ╚████╔╝ ██║██████╔╝██║  ██║
-   ╚═══╝  ╚═╝╚═════╝ ╚═╝  ╚═╝
-"""
-"""
-██████╗  █████╗ ███╗   ██╗ ██████╗ 
-██╔══██╗██╔══██╗████╗  ██║██╔═══██╗
-██║  ██║███████║██╔██╗ ██║██║   ██║
-██║  ██║██╔══██║██║╚██╗██║██║   ██║
-██████╔╝██║  ██║██║ ╚████║╚██████╔╝
-╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═══╝ ╚═════╝ 
-"""
-"""
-██╗   ██╗███████╗██╗         ████████╗██╗██████╗  ██████╗ 
-██║   ██║██╔════╝██║         ╚══██╔══╝██║██╔══██╗██╔═══██╗
-██║   ██║█████╗  ██║            ██║   ██║██████╔╝██║   ██║
-╚██╗ ██╔╝██╔══╝  ██║            ██║   ██║██╔══██╗██║   ██║
- ╚████╔╝ ███████╗███████╗██╗    ██║   ██║██║  ██║╚██████╔╝
-  ╚═══╝  ╚══════╝╚══════╝╚═╝    ╚═╝   ╚═╝╚═╝  ╚═╝ ╚═════╝
-"""
