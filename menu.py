@@ -178,12 +178,12 @@ def menu():
 
         # se ENTER for apertado e a seta estiver em CONTINUAR
         if codigo == 13 and y_seta == 9:
-            trocar_tela.trocar_tela("jogo")
+            trocar_tela.trocar_tela("menu_fases")
             break
 
         # se ENTER or apertado e a seta estiver em NOVO JOGO
         if codigo == 13 and y_seta == 11:
-            trocar_tela.trocar_tela("jogo")
+            trocar_tela.trocar_tela("menu_fases")
             break
 
         if codigo == 13 and y_seta == 13:

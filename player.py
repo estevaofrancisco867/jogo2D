@@ -1,4 +1,5 @@
 vida = 3
 dano = 1
+moedas = 0
 lerdeza_tiro = 0
-qtd_tiros = 1
+lvl = 0

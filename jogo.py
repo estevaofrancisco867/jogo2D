@@ -2,25 +2,28 @@ import os
 import WConio2  # pip install WConio2
 import trocar_tela
 import sprites
+import player
 
 
 
 def jogo():
     tela = []
     cont = 0
-    largura = 200
+    largura = 180
     altura = 45
-
     aviao_y = altura - 20
     aviao_x = largura // 2
     tiro_y = -1
     tiro_x = -1
     dinheiros = []
     moedas = 0
+    dano = player.dano
 
     # Cada inimigo é uma tupla (x, y)
     inimigos = [(5, 0), (30, 0), (50, 0), (75, 0), (90, 0)]
+    vida_inimigos = [2, 2, 2, 2, 2]
     inimigos_horizontais = [(0, 5), (3, 8)]  # inimigos horizontais
+    vida_inimigos_horizontais = [2, 2]
     direcao_horizontais = [1, 1, 1, 1]  
     tiros_inimigos = []  # tiros inimigos
     acertos = 0
@@ -50,19 +53,31 @@ def jogo():
                     tela[y][x] = " "
         for y in range(altura):
             for x in range(largura):
-                if (x, y) in inimigos:
-                    mostrar_sprite(sprites.get_inimigo(),x,y)
-                elif (x, y) in inimigos_horizontais:
-                    mostrar_sprite(sprites.get_inimigo_horizontal(),x,y)
-                elif (x, y) in tiros_inimigos:
+                if (x, y) in tiros_inimigos:
                     tela[y][x] = "!"
                 elif y == tiro_y and x == tiro_x:
                     tela[y][x] = "|"
+                elif (x, y) in inimigos:
+                    mostrar_sprite(sprites.get_inimigo(),x,y)
+                elif (x, y) in inimigos_horizontais:
+                    mostrar_sprite(sprites.get_inimigo_horizontal(),x,y)
                 elif y == aviao_y and x == aviao_x:
                     mostrar_sprite(sprites.get_aviao(),aviao_x,aviao_y)
                 elif [x, y] in dinheiros:
                     mostrar_sprite(sprites.get_dinheiro(), x, y)
 
+    def get_pontas(sprite_x, sprite_y, largura, altura):
+        return [ (sprite_x, sprite_y),(sprite_x + largura - 1, sprite_y), (sprite_x, sprite_y + altura - 1),  (sprite_x + largura - 1, sprite_y + altura - 1) ]
+
+    def colide_inimigos(inimigo_x, inimigo_y, larg_inim, alt_inim, aviao_x, aviao_y, larg_aviao, alt_aviao):
+
+        pontas = get_pontas(inimigo_x, inimigo_y, larg_inim, alt_inim)
+
+        for px, py in pontas:
+            if (aviao_x <= px < aviao_x + larg_aviao and
+                aviao_y <= py < aviao_y + alt_aviao):
+                return True  # colisão detectada
+        return False  # nenhuma ponta colidiu
 
     # Mostra a tela, suas bordas * e os acertos
     def mostrar_tela(tela, altura, largura, acertos):
@@ -83,18 +98,25 @@ def jogo():
                     tela[y + sprite_y][x + sprite_x] = caractere
 
     # Retorna True caso o tiro acerte em um inimigo
-    def verifica_colisao(tiro_x, tiro_y, inimigos,inimigos_horizontais):
-        nonlocal acertos, dinheiros
-        if (tiro_x, tiro_y) in inimigos:
-            inimigos.remove((tiro_x, tiro_y))
-            dinheiros.append([tiro_x,tiro_y])
-            acertos += 1
-            tiro_y = -1
-        elif (tiro_x, tiro_y) in inimigos_horizontais :
-            inimigos_horizontais.remove((tiro_x, tiro_y))
-            dinheiros.append([tiro_x,tiro_y])
-            acertos += 1
-            tiro_y = -1      
+    def verifica_colisao(tiro_x, inimigos,inimigos_horizontais):
+        nonlocal acertos, dinheiros, vida_inimigos, vida_inimigos_horizontais, dano, tiro_y
+        for i in range(len(inimigos) -1, -1, -1):
+            if inimigos[i] == (tiro_x,tiro_y):
+                vida_inimigos[i] -= dano
+                if vida_inimigos[i] == 0:
+                    inimigos.pop(i)
+                    vida_inimigos.pop(i)
+                    dinheiros.append([tiro_x,tiro_y])
+                tiro_y = -1
+
+        for i in range(len(inimigos_horizontais) -1, -1, -1):
+            if inimigos_horizontais[i] == (tiro_x,tiro_y):
+                vida_inimigos_horizontais[i] -= dano
+                if vida_inimigos_horizontais[i] == 0:
+                    inimigos_horizontais.pop(i)
+                    vida_inimigos_horizontais.pop(i)
+                    dinheiros.append([tiro_x,tiro_y])
+                tiro_y = -1
 
 
     def verifica_coleta(dinheiros):
@@ -121,19 +143,24 @@ def jogo():
     def checar_derrota():
         esperar = 0
         perdeu = False
-        if any(y == aviao_y and x == aviao_x for (x, y) in inimigos) or any(y == altura - 1 for (x, y) in inimigos):
-            print("Você foi atingido! Game Over.")
+        for x, y in inimigos:
+            if colide_inimigos(x,y,6,3,aviao_x,aviao_y,6,3):
+                perdeu = True
+        for x, y in inimigos_horizontais:
+            if colide_inimigos(x,y,6,4,aviao_x,aviao_y,6,3):
+                perdeu = True
+        if any(y == altura - 1 for (x, y) in inimigos):
             perdeu = True
-        if any(y == aviao_y and x == aviao_x for (x, y) in inimigos_horizontais) or any(y == altura - 1 for (x, y) in inimigos_horizontais):
-            print("Você foi atingido! Game Over.")        
+        if any(y == aviao_y and x == aviao_x for (x, y) in inimigos_horizontais) or any(y == altura - 1 for (x, y) in inimigos_horizontais):        
             perdeu = True
         if perdeu:
+            print("Você foi atingido! Game Over.")
             while esperar < 100000000:
                 esperar += 1
         return perdeu
     def entrada_jogador():
         nonlocal aviao_x, aviao_y, tiro_x, tiro_y, altura, largura
-        print(f"a,→ d,← w,↑ s,↓ f=fogo.", f"{moedas}R$")
+        print(f"a,→ d,← w,↑ s,↓ f=fogo.", f"{inimigos }R$")
         if WConio2.kbhit():
             codigo, simbolo = WConio2.getch()
             print(codigo, " ", simbolo)  # descobre o codigo da tecla pressionada
@@ -187,30 +214,13 @@ def jogo():
                     trocar_tela.trocar_tela("menu")
                     return True
 
-    def mover(x, y, intervalo=1, condicao=True, direcao=1):
-        if y is not False and x is not False:
-            if cont % intervalo == 0:
-                if condicao:
-                    return x + direcao, y + direcao
-            return x, y
-        if x is not False:
-            if cont % intervalo == 0:
-                if condicao:
-                    return x + direcao
-            return x
-        if y is not False:
-            if cont % intervalo == 0:
-                if condicao:
-                    return y + direcao
-            return y
-
     def movertiro(tiro_y):
         if tiro_y >= 0:
             return tiro_y - 1
         return tiro_y     
 
     def mover_inimigos(cont, inimigos):
-        if cont % 100 == 0:
+        if cont % 50 == 0:
             return [(x, y + 1) for (x, y) in inimigos if y + 1 < altura]
         return inimigos
 
@@ -300,10 +310,10 @@ def jogo():
         gotoxy(0, 0)
 
         # Mover o tiro do jogador
-        tiro_y = mover(False, tiro_y, 1, tiro_y >= 0, -1)
+        tiro_y = movertiro(tiro_y)
 
         # Verifica colisão do tiro do jogador com inimigos verticais
-        verifica_colisao(tiro_x, tiro_y, inimigos,inimigos_horizontais)
+        #verifica_colisao(tiro_x, inimigos,inimigos_horizontais)
 
         # Move e verifica colisão do dinheiro
         mover_dinheiro(dinheiros)
