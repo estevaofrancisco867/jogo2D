@@ -2,6 +2,7 @@ import os
 import WConio2
 import trocar_tela
 import sprites
+import status
 
 def menu_melhorias():
     #função para mudar o local do cursor
@@ -31,6 +32,11 @@ def menu_melhorias():
                         for fx, caractere in enumerate(linha):
                             if 0 <= y_foguete + fy < len(tela) and 0 <= x_foguete + fx < len(tela[0]): # ve se o sprite ta dentro da tela
                                 tela[y_foguete + fy][x_foguete + fx] = caractere
+
+                if y == y_dinheiro and x == x_dinheiro:
+                    tela[y][x] = f"{status.moedas}"
+                    tela[y][x+1] = "R"
+                    tela[y][x+2] = "$"
 
                 #sprites de dano, vida e vel. tiro
                 if y == y_dano and x == x_dano:
@@ -85,7 +91,35 @@ def menu_melhorias():
         elif y_seta < y_vel_tiro and (codigo == 115 or codigo == 83 or codigo == 80):
             y_seta += 10
         return y_seta
-    
+
+    # def melhorar(moedas,atributo): 
+    #     if atributo == status.vida or atributo == status.dano:
+    #         match atributo:
+    #             case 1:
+    #                 if moedas >= 5:
+    #                     moedas -= 5
+    #                     atributo += 1
+    #                     return moedas, atributo
+    #             case 2:
+    #                 if moedas >= 10:
+    #                     moedas -= 10
+    #                     atributo += 1
+    #                     return moedas, atributo # quebrado (vai ter q separar um pouco isso dai)
+    #             case _: return moedas, atributo  
+    #     elif atributo == status.lerdeza_tiro:
+    #         match atributo:
+    #             case 20:
+    #                 if moedas >= 5:
+    #                     moedas -= 5
+    #                     atributo -= 10
+    #                     return moedas, atributo
+    #             case 10:
+    #                 if moedas >= 10:
+    #                     moedas -= 5
+    #                     atributo -= 10
+    #                     return moedas, atributo
+    #             case _: return moedas, atributo
+
 
     '''
     ===== FASES =====
@@ -117,10 +151,13 @@ def menu_melhorias():
     #coordenadas iniciais da Seta Indicadora no menu
     y_seta = 7
     x_seta = 119
+    y_dinheiro, x_dinheiro = [2,largura_x - 10]
     y_vida, x_vida = [5,120] #eh o primeiro caractere de cima 
     y_dano, x_dano = [15, 120]
     y_vel_tiro, x_vel_tiro = [25,120]
     y_foguete, x_foguete = [5, 10]
+
+    lvl_vida,lvl_dano,lvl_vel_tiro = [1,1,1]
 
 
     # cria a tela
@@ -154,47 +191,14 @@ def menu_melhorias():
             os.system("cls")
             break
         # se ENTER for apertado e a seta estiver em CONTINUAR
-        if codigo == 13 and y_seta == 9:
+        if codigo == 13 and y_seta == 7:
+            # status.moedas, status.vida = melhorar(status.moedas)
             break
         # se ENTER or apertado e a seta estiver em NOVO JOGO
-        if codigo == 13 and y_seta == 11:
+        if codigo == 13 and y_seta == 17:
+            break
+        if codigo == 13 and y_seta == 27:
             break
 
         #== MUDA A POSICAO DA SETA SEGUNDO INPUT ==
         y_seta = MudaCoordenadaYSetaIndicadora(codigo, y_seta, x_seta, y_vida, y_vel_tiro)
-
-"""
-          ██         
-         ████        
-        ██████       
-        ██  ██       
-      ██████████     
-   █  ██████████  █  
-   ██████ ██ ██████  
-   █  █  ████  █  █  
-"""
-
-'''
-                    █                    
-                   █ █                   
-                  █   █                  
-                 █     █                 
-                █       █                
-               █         █               
-               █         █               
-               █  █████  █               
-            ████  █   █  ████            
-           █   █  █████  █   █           
-█████     █    █         █    █     █████
-█   █    █     █         █     █    █   █
-█   █   █      █         █      █   █   █
-█   █   █      █         █      █   █   █
-█   █   █      █         █      █   █   █
-█   █   █      █         █      █   █   █
-█████████████████████████████████████████
-█                                       █
-█████████████████████████████████████████
-█   █   █   █               █   █   █   █
-█   █   █   █               █   █   █   █
-█████   █████               █████   █████
-'''
