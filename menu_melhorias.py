@@ -92,35 +92,42 @@ def menu_melhorias():
             y_seta += 10
         return y_seta
 
-    # def melhorar(moedas,atributo): 
-    #     if atributo == status.vida or atributo == status.dano:
-    #         match atributo:
-    #             case 1:
-    #                 if moedas >= 5:
-    #                     moedas -= 5
-    #                     atributo += 1
-    #                     return moedas, atributo
-    #             case 2:
-    #                 if moedas >= 10:
-    #                     moedas -= 10
-    #                     atributo += 1
-    #                     return moedas, atributo # quebrado (vai ter q separar um pouco isso dai)
-    #             case _: return moedas, atributo  
-    #     elif atributo == status.lerdeza_tiro:
-    #         match atributo:
-    #             case 20:
-    #                 if moedas >= 5:
-    #                     moedas -= 5
-    #                     atributo -= 10
-    #                     return moedas, atributo
-    #             case 10:
-    #                 if moedas >= 10:
-    #                     moedas -= 5
-    #                     atributo -= 10
-    #                     return moedas, atributo
-    #             case _: return moedas, atributo
+    def melhorar_vida(moedas):
+        custo = 0
+        padrao = status.vida
+        valor = 0
+        if status.vida == 3: custo = 5
+        elif status.vida == 4: custo = 10
+        if moedas > custo:
+            moedas - custo
+            valor += 1
+        else: valor = padrao
+        return moedas,valor
 
+    def melhorar_dano(moedas):
+        custo = 0
+        padrao = status.dano
+        valor = 0
+        if status.dano == 1: custo = 5
+        elif status.dano == 2: custo = 10
+        if moedas > custo:
+            moedas - custo
+            valor += 1
+        else: valor = padrao
+        return moedas,valor
 
+    def melhorar_vel_tiro(moedas):
+        custo = 0
+        padrao = status.lerdeza_tiro
+        valor = 0
+
+        if status.lerdeza_tiro == 20: custo = 5     
+        elif status.lerdeza_tiro == 10: custo = 10
+        if moedas > custo:
+            moedas - custo
+            valor -= 10
+        else: valor = padrao
+        return moedas,valor
     '''
     ===== FASES =====
     '''
@@ -157,8 +164,6 @@ def menu_melhorias():
     y_vel_tiro, x_vel_tiro = [25,120]
     y_foguete, x_foguete = [5, 10]
 
-    lvl_vida,lvl_dano,lvl_vel_tiro = [1,1,1]
-
 
     # cria a tela
     CriarTela(altura_y, largura_x, tela, item)
@@ -190,15 +195,15 @@ def menu_melhorias():
         if codigo == 27: 
             os.system("cls")
             break
-        # se ENTER for apertado e a seta estiver em CONTINUAR
+        # se ENTER for apertado e a seta estiver em VIDA
         if codigo == 13 and y_seta == 7:
-            # status.moedas, status.vida = melhorar(status.moedas)
-            break
-        # se ENTER or apertado e a seta estiver em NOVO JOGO
+            status.moedas, status.vida = melhorar_vida(status.moedas)
+        # se ENTER or apertado e a seta estiver em DANO
         if codigo == 13 and y_seta == 17:
-            break
+            status.moedas, status.dano = melhorar_dano(status.moedas)
+        # se ENTER or apertado e a seta estiver em VEL_TIRO
         if codigo == 13 and y_seta == 27:
-            break
+            status.moedas, status.lerdeza_tiro = melhorar_vel_tiro(status.moedas)
 
         #== MUDA A POSICAO DA SETA SEGUNDO INPUT ==
         y_seta = MudaCoordenadaYSetaIndicadora(codigo, y_seta, x_seta, y_vida, y_vel_tiro)
