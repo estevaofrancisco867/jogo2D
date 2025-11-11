@@ -28,36 +28,23 @@ def menu_melhorias():
 
                 #sprite do foguete do menu
                 if y == y_foguete and x == x_foguete:
-                    for fy, linha in enumerate(sprites.get_foguete_menu()):
-                        for fx, caractere in enumerate(linha):
-                            if 0 <= y_foguete + fy < len(tela) and 0 <= x_foguete + fx < len(tela[0]): # ve se o sprite ta dentro da tela
-                                tela[y_foguete + fy][x_foguete + fx] = caractere
+                    mostrar_sprite(sprites.get_foguete_menu(),x_foguete,y_foguete)
 
                 if y == y_dinheiro and x == x_dinheiro:
-                    tela[y][x] = f"{status.moedas}"
-                    tela[y][x+1] = "R"
-                    tela[y][x+2] = "$"
-
+                    mostrar_sprite([f"{status.moedas}R$"],x_dinheiro,y_dinheiro)
                 #sprites de dano, vida e vel. tiro
                 if y == y_dano and x == x_dano:
-                    for dy, linha in enumerate(sprites.get_dano()):  
-                        for dx, caractere in enumerate(linha):
-                            if 0 <= y_dano + dy < len(tela) and 0 <= x_dano + dx < len(tela[0]): # ve se o sprite ta dentro da tela
-                                tela[y_dano + dy][x_dano + dx] = caractere
+                    mostrar_sprite(sprites.get_dano(status.dano),x_dano,y_dano)
 
                 if y == y_vida and x == x_vida:
-                    for vy, linha in enumerate(sprites.get_vida()):  
-                        for vx, caractere in enumerate(linha):
-                            if 0 <= y_vida + vy < len(tela) and 0 <= x_vida + vx < len(tela[0]): # ve se o sprite ta dentro da tela
-                                tela[y_vida + vy][x_vida + vx] = caractere
+                    mostrar_sprite(sprites.get_vida(status.vida),x_vida,y_vida)
 
                 if y == y_vel_tiro and x == x_vel_tiro:
-                    for vel_y, linha in enumerate(sprites.get_vel_tiro()):  
-                        for vel_x, caractere in enumerate(linha):
-                            if 0 <= y_vel_tiro + vel_y < len(tela) and 0 <= x_vel_tiro + vel_x < len(tela[0]): # ve se o sprite ta dentro da tela
-                                tela[y_vel_tiro + vel_y][x_vel_tiro + vel_x] = caractere
+                    mostrar_sprite(sprites.get_vel_tiro(status.lerdeza_tiro),x_vel_tiro,y_vel_tiro)
+
                 #Desenha seta
-                tela[y_seta][x_seta] = ">"
+                if y == y_seta and x == x_seta:
+                    mostrar_sprite(sprites.get_seta(),x_seta,y_seta)
 
                 #desenha os limites da tela
                 tela[y][largura_x - 1] = "*"
@@ -72,6 +59,12 @@ def menu_melhorias():
             for x in range(largura_x):
                 print(tela[y][x], end='')
             print()     #necessário para separar as listas da coordenada y
+
+    def mostrar_sprite(sprite,sprite_x,sprite_y):
+        nonlocal tela
+        for y, linha in enumerate(sprite):
+            for x, caractere in enumerate(linha):
+                    tela[y + sprite_y][x + sprite_x] = caractere
 
     #função que aumenta o relogio geral
     def AumentarRelogio(cont):
@@ -94,39 +87,35 @@ def menu_melhorias():
 
     def melhorar_vida(moedas):
         custo = 0
-        padrao = status.vida
-        valor = 0
-        if status.vida == 3: custo = 5
-        elif status.vida == 4: custo = 10
+        valor = status.vida
+        if valor == vida_lvl[1]: custo = custo_upg_1
+        elif valor == vida_lvl[2]: custo = custo_upg_2
+        elif valor == vida_lvl[3]: return moedas, valor
         if moedas > custo:
-            moedas - custo
+            moedas -= custo
             valor += 1
-        else: valor = padrao
         return moedas,valor
 
     def melhorar_dano(moedas):
         custo = 0
-        padrao = status.dano
-        valor = 0
-        if status.dano == 1: custo = 5
-        elif status.dano == 2: custo = 10
+        valor = status.dano
+        if valor == dano_lvl[1]: custo = custo_upg_1
+        elif valor == dano_lvl[2]: custo = custo_upg_2
+        elif valor == dano_lvl[3]: return moedas, valor
         if moedas > custo:
-            moedas - custo
+            moedas -= custo
             valor += 1
-        else: valor = padrao
         return moedas,valor
 
     def melhorar_vel_tiro(moedas):
         custo = 0
-        padrao = status.lerdeza_tiro
-        valor = 0
-
-        if status.lerdeza_tiro == 20: custo = 5     
-        elif status.lerdeza_tiro == 10: custo = 10
+        valor = status.lerdeza_tiro
+        if valor == vel_tiro_lvl[1]: custo = custo_upg_1
+        elif valor == vel_tiro_lvl[2]: custo = custo_upg_2
+        elif valor == vel_tiro_lvl[3]: return moedas, valor
         if moedas > custo:
-            moedas - custo
+            moedas -= custo
             valor -= 10
-        else: valor = padrao
         return moedas,valor
     '''
     ===== FASES =====
@@ -141,29 +130,24 @@ def menu_melhorias():
 
     # espeficações tela
     altura_y = 40
-    largura_x = 200
+    largura_x = 150
 
-    #coordenadas iniciais titulo
-    y_titulo = 7     #coordenada y inicial do primeiro item esquerdo do nome do jogo
-    esquerda_x_titulo = 18     #coordenada x inicial da primeiro item esquerdo do nome do jogo
-    #coordenadas iniciais CONTINUAR
-    #y_vida = 9
-    esquerda_x_continuar = 21
-    #coordenadas iniciais NOVO JOGO
-    y_novojogo = 11
-    esquerda_x_novojogo = 21
-    #coordenadas iniciais MELHORIAS
-    #y_vel_tiro = 13
-    esquerda_x_melhorias = 21
-    #coordenadas iniciais da Seta Indicadora no menu
-    y_seta = 7
-    x_seta = 119
-    y_dinheiro, x_dinheiro = [2,largura_x - 10]
-    y_vida, x_vida = [5,120] #eh o primeiro caractere de cima 
-    y_dano, x_dano = [15, 120]
-    y_vel_tiro, x_vel_tiro = [25,120]
-    y_foguete, x_foguete = [5, 10]
+    #coordenadas iniciais
+    y_seta = 8
+    x_seta = 57
+    y_dinheiro, x_dinheiro = [2,largura_x - 20]
+    y_vida, x_vida = [7,60] #eh o primeiro caractere de cima 
+    y_dano, x_dano = [17, 60]
+    y_vel_tiro, x_vel_tiro = [27,60]
+    y_foguete, x_foguete = [9, 10]
 
+    #valores como parâmetro
+    custo_upg_1 = 5
+    custo_upg_2 = 10
+    vel_tiro_lvl = [0, 21, 11, 1] #vel_tiro_lvl[1] indice é o lvl
+    dano_lvl = [0, 1, 2, 3]
+    vida_lvl = [0, 3, 4, 5]
+    
 
     # cria a tela
     CriarTela(altura_y, largura_x, tela, item)
