@@ -47,7 +47,7 @@ def menu_melhorias():
 
                 #Desenha seta
                 if y == y_seta and x == x_seta:
-                    mostrar_sprite(sprites.get_seta(),x_seta,y_seta)
+                    mostrar_sprite(sprites.get_seta_upgrades(),x_seta,y_seta)
 
                 if y == y_descricao and x == x_descricao:
                     mostrar_sprite(["↑, w ou W e ↓,s ou S para navegação."],x_descricao,y_descricao)
@@ -218,9 +218,10 @@ def menu_melhorias():
 
         #== CAPTURA INPUT DO JOGADOR ==
         codigo = CapturaInput(codigo)
-
+        
+        # se ESC for pressionado
         if codigo == 27: 
-            os.system("cls")
+            trocar_tela.trocar_tela("menu")
             break
         # se a seta estiver em VIDA
         if y_seta == y_vida + 1:
@@ -246,6 +247,7 @@ def menu_melhorias():
             descricao("voltar")
             if codigo == 13:
                 trocar_tela.trocar_tela("menu")
+                break
 
         print(status.vida,status.dano,status.lerdeza_tiro)
 

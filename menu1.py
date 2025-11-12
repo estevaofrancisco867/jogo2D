@@ -1,6 +1,5 @@
 import os
 import WConio2
-import sprites
 import trocar_tela
 import salvar
 
@@ -27,45 +26,60 @@ def menu():
             for x in range(largura_x):
                 #Desenha titulo
                 if y == y_titulo and x == esquerda_x_titulo:
-                    linhas = imagemtitulo.splitlines()
-                    for i1, linha in enumerate(linhas):
-                        for i2, elemento in enumerate(linha):
-                            tela[y + i1][x + i2] = elemento
+                    tela[y][x] = "S"
+                    tela[y][x+1] = "P"
+                    tela[y][x+2] = "A"
+                    tela[y][x+3] = "C"
+                    tela[y][x+4] = "E"
+
+                    tela[y][x+6] = "I"
+                    tela[y][x+7] = "N"
+                    tela[y][x+8] = "V"
+                    tela[y][x+9] = "A"
+                    tela[y][x+10] = "D"
+                    tela[y][x+11] = "E"
+                    tela[y][x+12] = "R"
+                    tela[y][x+13] = "S"
 
                 #Desenha continuar
                 if y == y_continuar and x == esquerda_x_continuar:
-                    linhas = imagemcontinuar.splitlines()
-                    for i1, linha in enumerate(linhas):
-                        for i2, elemento in enumerate(linha):
-                            tela[y + i1][x + i2] = elemento
+                    tela[y][x] = "C"
+                    tela[y][x+1] = "O"
+                    tela[y][x+2] = "N"
+                    tela[y][x+3] = "T"
+                    tela[y][x+4] = "I"
+                    tela[y][x+5] = "N"
+                    tela[y][x+6] = "U"
+                    tela[y][x+7] = "A"
+                    tela[y][x+8] = "R"
 
                 #Desenha novo jogo
                 if y == y_novojogo and x == esquerda_x_novojogo:
-                    linhas = imagemnovojogo.splitlines()
-                    for i1, linha in enumerate(linhas):
-                        for i2, elemento in enumerate(linha):
-                            tela[y + i1][x + i2] = elemento
+                    tela[y][x] = "N"
+                    tela[y][x+1] = "O"
+                    tela[y][x+2] = "V"
+                    tela[y][x+3] = "O"
+
+
+                    tela[y][x+5] = "J"
+                    tela[y][x+6] = "O"
+                    tela[y][x+7] = "G"
+                    tela[y][x+8] = "O"
             
                 #Desenha melhorias
                 if y == y_melhorias and x == esquerda_x_melhorias:
-                    linhas = imagemmelhorias.splitlines()
-                    for i1, linha in enumerate(linhas):
-                        for i2, elemento in enumerate(linha):
-                            tela[y + i1][x + i2] = elemento
+                    tela[y][x] = "M"
+                    tela[y][x+1] = "E"
+                    tela[y][x+2] = "L"
+                    tela[y][x+3] = "H"
+                    tela[y][x+4] = "O"
+                    tela[y][x+5] = "R"
+                    tela[y][x+6] = "I"
+                    tela[y][x+7] = "A"
+                    tela[y][x+8] = "S"
             
-                #Desenhar salvar
-                if y == y_salvar and x == esquerda_x_salvar:
-                    linhas = imagemsalvar.splitlines()
-                    for i1, linha in enumerate(linhas):
-                        for i2, elemento in enumerate(linha):
-                            tela[y + i1][x + i2] = elemento
-
                 #Desenha seta
-                if y == y_seta and x == x_seta:
-                    linhas = imagemseta.splitlines()
-                    for i1, linha in enumerate(linhas):
-                        for i2, elemento in enumerate(linha):
-                            tela[y + i1][x + i2] = elemento
+                tela[y_seta][x_seta] = ">"
 
 
     #função para colocar a tela(matriz) no terminal
@@ -89,9 +103,9 @@ def menu():
     #função para mudar as coordenadas da seta indicadora na tela(matriz)
     def MudaCoordenadaYSetaIndicadora(codigo, y_seta, x_seta, y_continuar, y_melhorias):
         if y_seta > y_continuar and (codigo == 119 or codigo == 87 or codigo == 72):
-            y_seta -= 5
-        elif y_seta < y_salvar and (codigo == 115 or codigo == 83 or codigo == 80):
-            y_seta += 5
+            y_seta -= 2
+        elif y_seta < y_melhorias and (codigo == 115 or codigo == 83 or codigo == 80):
+            y_seta += 2
         return y_seta
     
 
@@ -107,33 +121,24 @@ def menu():
     item = " "
 
     # espeficações tela
-    altura_y = 38
-    largura_x = 150
+    altura_y = 40
+    largura_x = 200
 
     #coordenadas iniciais titulo
-    y_titulo = 1     #coordenada y inicial do primeiro item esquerdo do nome do jogo
-    esquerda_x_titulo = 35     #coordenada x inicial da primeiro item esquerdo do nome do jogo
-    imagemtitulo = sprites.get_titulo()
+    y_titulo = 7     #coordenada y inicial do primeiro item esquerdo do nome do jogo
+    esquerda_x_titulo = 18     #coordenada x inicial da primeiro item esquerdo do nome do jogo
     #coordenadas iniciais CONTINUAR
-    y_continuar = 18
-    esquerda_x_continuar = 52
-    imagemcontinuar = sprites.get_continuar()
+    y_continuar = 9
+    esquerda_x_continuar = 21
     #coordenadas iniciais NOVO JOGO
-    y_novojogo = 23
-    esquerda_x_novojogo = 52
-    imagemnovojogo = sprites.get_novojogo()
+    y_novojogo = 11
+    esquerda_x_novojogo = 21
     #coordenadas iniciais MELHORIAS
-    y_melhorias = 28
-    esquerda_x_melhorias = 52
-    imagemmelhorias = sprites.get_melhorias()
-    #coordenadas iniciais SALVAR
-    y_salvar = 33
-    esquerda_x_salvar = 52
-    imagemsalvar = sprites.get_salvar()
+    y_melhorias = 13
+    esquerda_x_melhorias = 21
     #coordenadas iniciais da Seta Indicadora no menu
-    y_seta = 18
-    x_seta = 44
-    imagemseta = sprites.get_seta()
+    y_seta = 9
+    x_seta = 19
     # #estado:opção escolhida
     # state = ""
 
@@ -148,8 +153,8 @@ def menu():
     codigo = 0
 
     while True:
-        altura_y = 38
-        largura_x = 150
+        altura_y = 35
+        largura_x = 50
 
         #== LIMPANDO TELA ==
         LimparTela(tela)
@@ -173,22 +178,26 @@ def menu():
             break
 
         # se ENTER for apertado e a seta estiver em CONTINUAR
-        if codigo == 13 and y_seta == y_continuar:
+        if codigo == 13 and y_seta == 9:
+            # try:
+            #     salvar.carregar()
+            #     trocar_tela.trocar_tela("menu_fases")
+            #     break
+            # except FileNotFoundError:
+            #     print("Nenhum save encontrado. Inicie um novo jogo!")
             trocar_tela.trocar_tela("menu_fases")
-            break
 
         # se ENTER or apertado e a seta estiver em NOVO JOGO
-        if codigo == 13 and y_seta == y_novojogo:
+        if codigo == 13 and y_seta == 11:
             salvar.novo_jogo()
             trocar_tela.trocar_tela("menu_fases")
             break
+
         # se ENTER or apertado e a seta estiver em MELHORIAS
-        if codigo == 13 and y_seta == y_melhorias:
+        if codigo == 13 and y_seta == 13:
             trocar_tela.trocar_tela("menu_melhorias")
             break
-        # se ENTER or apertado e a seta estiver em SALVAR
-        if codigo == 13 and y_seta == y_salvar:
-            salvar.salvar()
 
         #== MUDA A POSICAO DA SETA SEGUNDO INPUT ==
         y_seta = MudaCoordenadaYSetaIndicadora(codigo, y_seta, x_seta, y_continuar, y_melhorias)
+#menu()

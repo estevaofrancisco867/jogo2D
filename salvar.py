@@ -5,7 +5,7 @@ def salvar():
     with open("save.txt", "w") as arquivo:
         for item in status.getValores():
             arquivo.write(str(item) + " ")
-        print("jogo salvo!")
+        print("Jogo salvo!")
 
 def carregar():
     carregados = []

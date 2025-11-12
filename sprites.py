@@ -179,7 +179,7 @@ def get_foguete_menu():
     ]
     return sprite_foguete_menu
 
-def get_seta():
+def get_seta_upgrades():
    sprite_seta = [
       "█",
       " █",
@@ -265,6 +265,63 @@ def get_voltar():
   ]
   return sprite_voltar
 
+def get_titulo():
+   imagemtitulo = """
+      ██████╗  █████╗ ████████╗██████╗ ██╗   ██╗██╗     ██╗  ██╗ █████╗    
+      ██╔══██╗██╔══██╗╚══██╔══╝██╔══██╗██║   ██║██║     ██║  ██║██╔══██╗   
+      ██████╔╝███████║   ██║   ██████╔╝██║   ██║██║     ███████║███████║   
+      ██╔═══╝ ██╔══██║   ██║   ██╔══██╗██║   ██║██║     ██╔══██║██╔══██║   
+      ██║     ██║  ██║   ██║   ██║  ██║╚██████╔╝███████╗██║  ██║██║  ██║   
+      ╚═╝     ╚═╝  ╚═╝   ╚═╝   ╚═╝  ╚═╝ ╚═════╝ ╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝   
+
+     ██████╗  █████╗ ██╗      █████╗  ██████╗████████╗██╗ ██████╗ █████╗ 
+    ██╔════╝ ██╔══██╗██║     ██╔══██╗██╔════╝╚══██╔══╝██║██╔════╝██╔══██╗
+    ██║  ███╗███████║██║     ███████║██║        ██║   ██║██║     ███████║
+    ██║   ██║██╔══██║██║     ██╔══██║██║        ██║   ██║██║     ██╔══██║
+    ╚██████╔╝██║  ██║███████╗██║  ██║╚██████╗   ██║   ██║╚██████╗██║  ██║
+     ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝ ╚═════╝   ╚═╝   ╚═╝ ╚═════╝╚═╝  ╚═╝ """.strip("\n")
+   return imagemtitulo
+
+def get_continuar():
+   imagemcontinuar = """
+    ░█▀▀░█▀█░█▀█░▀█▀░▀█▀░█▀█░█░█░█▀█░█▀▄
+    ░█░░░█░█░█░█░░█░░░█░░█░█░█░█░█▀█░█▀▄
+    ░▀▀▀░▀▀▀░▀░▀░░▀░░▀▀▀░▀░▀░▀▀▀░▀░▀░▀░▀
+    """.strip("\n")
+   return imagemcontinuar
+
+def get_novojogo():
+   imagemnovojogo = """
+    ░█▀█░█▀█░█░█░█▀█░░░▀▀█░█▀█░█▀▀░█▀█
+    ░█░█░█░█░▀▄▀░█░█░░░░░█░█░█░█░█░█░█
+    ░▀░▀░▀▀▀░░▀░░▀▀▀░░░▀▀░░▀▀▀░▀▀▀░▀▀▀
+    """.strip("\n")
+   return imagemnovojogo
+
+def get_melhorias():
+   imagemmelhorias = """
+    ░█▄█░█▀▀░█░░░█░█░█▀█░█▀▄░▀█▀░█▀█░█▀▀
+    ░█░█░█▀▀░█░░░█▀█░█░█░█▀▄░░█░░█▀█░▀▀█
+    ░▀░▀░▀▀▀░▀▀▀░▀░▀░▀▀▀░▀░▀░▀▀▀░▀░▀░▀▀▀
+    """.strip("\n")
+   return imagemmelhorias
+
+def get_salvar():
+   imagemsalvar = """
+    ░█▀▀░█▀█░█░░░█░█░█▀█░█▀▄
+    ░▀▀█░█▀█░█░░░▀▄▀░█▀█░█▀▄
+    ░▀▀▀░▀░▀░▀▀▀░░▀░░▀░▀░▀░▀
+    """.strip("\n")
+   return imagemsalvar
+
+def get_fase1nome():
+   imagem_fase1nome = """
+    █ █ ▀█▀ █▀█   █   █▀█ █▀▀ ▀█▀ █▀▀ █▀█
+    ▀▄▀  █  █▀█   █   █▀█ █    █  █▀▀ █▀█
+     ▀  ▀▀▀ ▀ ▀   ▀▀▀ ▀ ▀ ▀▀▀  ▀  ▀▀▀ ▀ ▀""".strip("\n")
+   return imagem_fase1nome
+
+
 def get_fase1():
     imagem_fase1 = """
                                       ■■■■■■            
@@ -293,6 +350,13 @@ def get_fase1():
                 ■■■■■■■■■■■■■■                          """.strip("\n") #remove os quebra linhas
     return imagem_fase1
 
+def get_fase2nome():
+   imagem_fase2nome = """
+    █ █ █▀█ █▀█ █▀▀ ▀ █▀▀   █▀█ █▀▄ ▀▀█  
+    █▀█ █ █ █▀█ █ █   ▀▀█   █ █ █▀▄   █  
+    ▀ ▀ ▀▀▀ ▀ ▀ ▀▀▀   ▀▀▀   ▀▀▀ ▀▀  ▀▀  ▀""".strip("\n")
+   return imagem_fase2nome
+
 def get_fase2():
     imagem_fase2 = """
                    ■■■■■■■■            
@@ -316,6 +380,13 @@ def get_fase2():
                  ■■■■■■■■              """.strip("\n")
     return imagem_fase2
 
+def get_fase3nome():
+   imagem_fase3nome = """
+    █▀█ █▀█ █▀▄ █▀▄ █▀█ █▄█ █▀▀ █▀▄ █▀█
+    █▀█ █ █ █ █ █▀▄ █ █ █ █ █▀▀ █ █ █▀█
+    ▀ ▀ ▀ ▀ ▀▀  ▀ ▀ ▀▀▀ ▀ ▀ ▀▀▀ ▀▀  ▀ ▀""".strip("\n")
+   return imagem_fase3nome
+
 def get_fase3():
     imagem_fase3 = """
                                             ■■■■■■
@@ -336,6 +407,14 @@ def get_fase3():
     ■■■■■■■■■                                     
      ■■■■■                                        """.strip("\n")
     return imagem_fase3
+
+def get_seta():
+   imagemseta = """
+    ▀▄ 
+      █
+    ▄▀ """.strip("\n")
+   return imagemseta
+
 """
           ██         
          ████        
