@@ -111,18 +111,20 @@ def jogo():
     # Retorna True caso o tiro acerte em um inimigo
     def verifica_colisao(tiro_x, inimigos,inimigos_horizontais):
         nonlocal dinheiros, vida_inimigos, vida_inimigos_horizontais, dano, tiro_y
+
         for i in range(len(inimigos) -1, -1, -1):
             if colide_elementos(inimigos[i][0],inimigos[i][1],5,3,tiro_x,tiro_y,1,1):
                 vida_inimigos[i] -= dano
-                if vida_inimigos[i] == 0:
+                if vida_inimigos[i] <= 0:
                     inimigos.pop(i)
                     vida_inimigos.pop(i)
                     dinheiros.append([tiro_x,tiro_y])
                 tiro_y = -1
+
         for i in range(len(inimigos_horizontais) -1, -1, -1):
             if colide_elementos(inimigos_horizontais[i][0],inimigos_horizontais[i][1],7,4,tiro_x,tiro_y,1,1):
                 vida_inimigos_horizontais[i] -= dano
-                if vida_inimigos_horizontais[i] == 0:
+                if vida_inimigos_horizontais[i] <= 0:
                     inimigos_horizontais.pop(i)
                     vida_inimigos_horizontais.pop(i)
                     dinheiros.append([tiro_x,tiro_y])
@@ -144,12 +146,12 @@ def jogo():
     def checar_vitoria():
         esperar = 0
         galaxia = ""
-        if  inimigos == [] and inimigos_horizontais == [] and onda >= fase * 2:
+        if  inimigos == [] and dinheiros == [] and inimigos_horizontais == [] and onda >= fase * 2:
             match fase:
                 case 1: galaxia = "a Via Láctea"
                 case 2: galaxia = "Hoag's"
                 case 3: galaxia = "Andrômeda"
-            print(f"Você libertou {galaxia}!")
+            print(f"Você libertou {galaxia}!                             ")
             while esperar < 100000000:
                 esperar += 1
             return True
@@ -188,7 +190,7 @@ def jogo():
     #função com o WConio2 para receber qualquer entrada
     def entrada_jogador():
         nonlocal aviao_x, aviao_y, tiro_x, tiro_y, altura, largura
-        print(f"a,→ d,← w,↑ s,↓ f=fogo.", f"{moedas }R$  {mostrar_vida(vidas)}")
+        print(f"a,→ d,← w,↑ s,↓ f=fogo.", f"{status.moedas}R$  {mostrar_vida(vidas)}       ")
         if WConio2.kbhit():
             codigo, simbolo = WConio2.getch()
             print(codigo, " ", simbolo)  # descobre o codigo da tecla pressionada
@@ -249,7 +251,7 @@ def jogo():
         return tiro_y     
     #move os inimigos para baixo
     def mover_inimigos(cont, inimigos):
-        if cont % 50 == 0:
+        if cont % 70 == 0:
             return [(x, y + 1) for (x, y) in inimigos if y + 1 < altura]
         return inimigos
     
@@ -274,7 +276,7 @@ def jogo():
     # Mover inimigos horizontais
     def mover_inimigos_horizontais(cont):
         nonlocal inimigos_horizontais, direcao_horizontais
-        VELOCIDADE_HORIZONTAL = 10  # Quanto maior, mais lento
+        VELOCIDADE_HORIZONTAL = 30  # Quanto maior, mais lento
 
         if cont % VELOCIDADE_HORIZONTAL != 0:
             return  # Só move a cada 200 ciclos
@@ -296,7 +298,7 @@ def jogo():
     # Mover tiros dos inimigos para baixo
     def mover_tiros_inimigos():
         nonlocal tiros_inimigos
-        VELOCIDADE_TIRO_INIMIGO = 40  # Quanto maior, mais lento
+        VELOCIDADE_TIRO_INIMIGO = 10  # Quanto maior, mais lento
 
         if cont % VELOCIDADE_TIRO_INIMIGO != 0:
             return  # só move os tiros de vez em quando
@@ -372,7 +374,7 @@ def jogo():
         # Verifica vitória
         if checar_vitoria():
             status.moedas = moedas
-            status.fase = fase + 1
+            status.fase += 1
             status.onda = 0
             trocar_tela.trocar_tela("menu_melhorias")
             break

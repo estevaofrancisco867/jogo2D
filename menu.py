@@ -179,15 +179,19 @@ def menu():
 
         # se ENTER for apertado e a seta estiver em CONTINUAR
         if codigo == 13 and y_seta == 9:
-            salvar.carregar()
-            # trocar_tela.trocar_tela("menu_fases")
-            # break
+            # try:
+            #     salvar.carregar()
+            #     trocar_tela.trocar_tela("menu_fases")
+            #     break
+            # except FileNotFoundError:
+            #     print("Nenhum save encontrado. Inicie um novo jogo!")
+            trocar_tela.trocar_tela("menu_fases")
 
         # se ENTER or apertado e a seta estiver em NOVO JOGO
         if codigo == 13 and y_seta == 11:
             salvar.novo_jogo()
-            # trocar_tela.trocar_tela("menu_fases")
-            # break
+            trocar_tela.trocar_tela("menu_fases")
+            break
 
         # se ENTER or apertado e a seta estiver em MELHORIAS
         if codigo == 13 and y_seta == 13:

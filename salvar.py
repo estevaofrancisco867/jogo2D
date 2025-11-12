@@ -9,18 +9,21 @@ def salvar():
 
 def carregar():
     carregados = []
-
     with open("save.txt", "r") as arquivo:
-        if len(arquivo.read()) > 0:
-            for item in arquivo.read().split(" "):
-                carregados.append(item)
-            if len(carregados) > len(status.getValores()):
-                carregados.pop()
-            for i in range(len(carregados)):
-                carregados[i] = int(carregados[i])
-                valores_status[i] = carregados[i]
-        else: print("Nenhum save encontrado. Inicie um novo jogo!")
-    print(status.getValores())
+        conteudo = arquivo.read().strip()
+        if conteudo:
+            for item in conteudo.split(" "):
+                if item != '':
+                    carregados.append(int(item))
+        print(carregados)
+    status.vida = carregados[0]
+    status.dano = carregados[1]
+    status.moedas = carregados[2]
+    status.lerdeza_tiro = carregados[3]
+    status.fase = carregados[4]
+    status.onda = carregados[5]
+    print("carregando save...")
+    esperar(10000000)
 
 def novo_jogo():
     status.vida = 3
@@ -30,6 +33,12 @@ def novo_jogo():
     status.fase = 1
     status.onda = 0
     arquivo = open("save.txt", "w")
-    arquivo.write("")
+    arquivo.write("3 1 0 13 1 0")
     arquivo.close()
-    print("Save deletado e status resetado!!")
+    print("Criando novo save...")
+    esperar(10000000)
+
+def esperar(segundos):
+    cont = 0
+    while cont < segundos:
+        cont += 1
