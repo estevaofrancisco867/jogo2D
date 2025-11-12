@@ -1,6 +1,9 @@
 vida = 3
 dano = 1
-moedas = 1000
-lerdeza_tiro = 21
+moedas = 50
+lerdeza_tiro = 1
 fase = 1
-onda = 0
+onda = 2
+
+def getValores():
+    return [vida, dano, moedas, lerdeza_tiro, fase, onda]

@@ -26,22 +26,24 @@ def menu_melhorias():
         for y in range(altura_y):
             for x in range(largura_x):
 
-                #sprite do foguete do menu
+                #sprite do foguete do menu e do dinheiro
                 if y == y_foguete and x == x_foguete:
                     mostrar_sprite(sprites.get_foguete_menu(),x_foguete,y_foguete)
 
                 if y == y_dinheiro and x == x_dinheiro:
-                    mostrar_sprite([f"{status.moedas}R$"],x_dinheiro,y_dinheiro)
+                    mostrar_sprite(sprites.get_dinheiro_menu(status.moedas),x_dinheiro,y_dinheiro)
                 #sprites de dano, vida e vel. tiro
                 if y == y_dano and x == x_dano:
-                    mostrar_sprite(sprites.get_dano(status.dano),x_dano,y_dano)
+                    mostrar_sprite(sprites.get_dano(dano),x_dano,y_dano)
 
                 if y == y_vida and x == x_vida:
-                    mostrar_sprite(sprites.get_vida(status.vida),x_vida,y_vida)
+                    mostrar_sprite(sprites.get_vida(vida),x_vida,y_vida)
 
                 if y == y_vel_tiro and x == x_vel_tiro:
-                    mostrar_sprite(sprites.get_vel_tiro(status.lerdeza_tiro),x_vel_tiro,y_vel_tiro)
+                    mostrar_sprite(sprites.get_vel_tiro(vel_tiro),x_vel_tiro,y_vel_tiro)
 
+                if y == y_voltar and x == x_voltar:
+                    mostrar_sprite(sprites.get_voltar(),x_voltar,y_voltar)
                 #Desenha seta
                 if y == y_seta and x == x_seta:
                     mostrar_sprite(sprites.get_seta(),x_seta,y_seta)
@@ -78,16 +80,23 @@ def menu_melhorias():
             return codigo
 
     #função para mudar as coordenadas da seta indicadora na tela(matriz)
-    def MudaCoordenadaYSetaIndicadora(codigo, y_seta, x_seta, y_vida, y_vel_tiro):
-        if y_seta > y_vida and (codigo == 119 or codigo == 87 or codigo == 72):
-            y_seta -= 10
-        elif y_seta < y_vel_tiro and (codigo == 115 or codigo == 83 or codigo == 80):
-            y_seta += 10
+    def MudaCoordenadaYSetaIndicadora(codigo, y_seta, y_vida, y_voltar):
+        if y_seta > y_vida + 1 and (codigo == 119 or codigo == 87 or codigo == 72):
+            if y_seta == y_voltar:
+                y_seta -= 7
+            else:
+                y_seta -= 10
+        elif y_seta + 1 <= y_voltar and (codigo == 115 or codigo == 83 or codigo == 80):
+            if y_seta == y_voltar - 7:
+                y_seta += 7
+            else:
+                y_seta += 10
         return y_seta
 
+    #as funções melhorar pegam o status e passam para o próximo nivel se tiver dinheiro suficiente
     def melhorar_vida(moedas):
         custo = 0
-        valor = status.vida
+        valor = vida
         if valor == vida_lvl[1]: custo = custo_upg_1
         elif valor == vida_lvl[2]: custo = custo_upg_2
         elif valor == vida_lvl[3]: return moedas, valor
@@ -95,10 +104,10 @@ def menu_melhorias():
             moedas -= custo
             valor += 1
         return moedas,valor
-
+    
     def melhorar_dano(moedas):
         custo = 0
-        valor = status.dano
+        valor = dano
         if valor == dano_lvl[1]: custo = custo_upg_1
         elif valor == dano_lvl[2]: custo = custo_upg_2
         elif valor == dano_lvl[3]: return moedas, valor
@@ -106,16 +115,17 @@ def menu_melhorias():
             moedas -= custo
             valor += 1
         return moedas,valor
-
+    
     def melhorar_vel_tiro(moedas):
         custo = 0
-        valor = status.lerdeza_tiro
+        valor = vel_tiro
         if valor == vel_tiro_lvl[1]: custo = custo_upg_1
         elif valor == vel_tiro_lvl[2]: custo = custo_upg_2
         elif valor == vel_tiro_lvl[3]: return moedas, valor
         if moedas > custo:
             moedas -= custo
-            valor -= 10
+            valor -= 6
+            print(valor)
         return moedas,valor
     '''
     ===== FASES =====
@@ -129,24 +139,28 @@ def menu_melhorias():
     item = " "
 
     # espeficações tela
-    altura_y = 40
+    altura_y = 38
     largura_x = 150
 
     #coordenadas iniciais
-    y_seta = 8
+    y_seta = 6
     x_seta = 57
-    y_dinheiro, x_dinheiro = [2,largura_x - 20]
-    y_vida, x_vida = [7,60] #eh o primeiro caractere de cima 
-    y_dano, x_dano = [17, 60]
-    y_vel_tiro, x_vel_tiro = [27,60]
-    y_foguete, x_foguete = [9, 10]
+    y_dinheiro, x_dinheiro = [2,largura_x - 30]
+    y_vida, x_vida = [5,60] #eh o primeiro caractere de cima 
+    y_dano, x_dano = [15, 60]
+    y_vel_tiro, x_vel_tiro = [25,60]
+    y_foguete, x_foguete = [7, 10]
+    y_voltar, x_voltar = [altura_y - 5,60]
 
-    #valores como parâmetro
+    #valores como parâmetro (soft coding)
     custo_upg_1 = 5
     custo_upg_2 = 10
-    vel_tiro_lvl = [0, 21, 11, 1] #vel_tiro_lvl[1] indice é o lvl
-    dano_lvl = [0, 1, 2, 3]
-    vida_lvl = [0, 3, 4, 5]
+    vida = status.vida
+    dano = status.dano
+    vel_tiro = status.lerdeza_tiro
+    vel_tiro_lvl = [0, vel_tiro, 7, 1] #vel_tiro_lvl[1] indice é o lvl
+    dano_lvl = [0, dano, 2, 3]
+    vida_lvl = [0, vida, 4, 5]
     
 
     # cria a tela
@@ -180,14 +194,16 @@ def menu_melhorias():
             os.system("cls")
             break
         # se ENTER for apertado e a seta estiver em VIDA
-        if codigo == 13 and y_seta == 7:
-            status.moedas, status.vida = melhorar_vida(status.moedas)
+        if codigo == 13 and y_seta == y_vida + 1:
+            status.moedas, vida = melhorar_vida(status.moedas)
         # se ENTER or apertado e a seta estiver em DANO
-        if codigo == 13 and y_seta == 17:
-            status.moedas, status.dano = melhorar_dano(status.moedas)
+        if codigo == 13 and y_seta == y_dano + 1:
+            status.moedas, dano = melhorar_dano(status.moedas)
         # se ENTER or apertado e a seta estiver em VEL_TIRO
-        if codigo == 13 and y_seta == 27:
-            status.moedas, status.lerdeza_tiro = melhorar_vel_tiro(status.moedas)
-
+        if codigo == 13 and y_seta == y_vel_tiro + 1:
+            status.moedas, vel_tiro = melhorar_vel_tiro(status.moedas)
+        # se ENTER or apertado e a seta estiver em VOLTAR
+        if codigo == 13 and y_seta == y_voltar:
+            trocar_tela.trocar_tela("menu")
         #== MUDA A POSICAO DA SETA SEGUNDO INPUT ==
-        y_seta = MudaCoordenadaYSetaIndicadora(codigo, y_seta, x_seta, y_vida, y_vel_tiro)
+        y_seta = MudaCoordenadaYSetaIndicadora(codigo, y_seta, y_vida, y_voltar)

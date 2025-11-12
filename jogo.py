@@ -7,8 +7,8 @@ import status
 def jogo():
     tela = []
     cont = 0
-    largura = 180
-    altura = 45
+    largura = 150
+    altura = 38
     aviao_y = altura - 6
     aviao_x = largura // 2
     tiro_y = -1
@@ -16,6 +16,7 @@ def jogo():
     dinheiros = []
     moedas = status.moedas
     dano = status.dano
+    vidas = status.vida
 
     # Cada inimigo é uma tupla (x, y)
     inimigos = []
@@ -95,6 +96,17 @@ def jogo():
         for y, linha in enumerate(sprite):
             for x, caractere in enumerate(linha):
                     tela[y + sprite_y][x + sprite_x] = caractere
+    
+    def mostrar_vida(qtd):
+        nonlocal vidas
+        coracoes = ""
+        match qtd:
+            case 1: coracoes = "█"
+            case 2: coracoes = "█ █"
+            case 3: coracoes = "█ █ █"
+            case 4: coracoes = "█ █ █ █"
+            case 5: coracoes = "█ █ █ █ █"
+        return "vidas: " + coracoes + "           "
 
     # Retorna True caso o tiro acerte em um inimigo
     def verifica_colisao(tiro_x, inimigos,inimigos_horizontais):
@@ -144,34 +156,39 @@ def jogo():
 
     #retorna True caso o jogador perca o jogo por tocar na nave inimiga ou deixar eles chegar em baixo
     def checar_derrota():
+        nonlocal vidas
         esperar = 0
-        perdeu = False
         frase = ""
         for x, y in inimigos:
             if colide_elementos(x,y,5,3,aviao_x,aviao_y,6,3):
-                perdeu = True
+                vidas -= 1
+                inimigos.remove((x, y))
                 frase = "Um inimigo te atingiu!"
+            if y == altura - 3:
+                vidas -= 1
+                inimigos.remove((x, y))
+                frase = "Algum inimigo escapou!"
         for x, y in inimigos_horizontais:
             if colide_elementos(x,y,7,4,aviao_x,aviao_y,6,3):
-                perdeu = True
+                vidas -= 1
+                inimigos_horizontais.remove((x, y))
                 frase = "Você tocou no inimigo atirador!"
         for x, y in tiros_inimigos:
             if colide_elementos(x,y,1,1,aviao_x,aviao_y,6,3):
-                perdeu = True
+                tiros_inimigos.remove((x, y))
+                vidas -= 1
                 frase = "Você tomou tiro do inimigo!"
-        if any(y == altura - 1 for (x, y) in inimigos):
-            perdeu = True
-            frase = "Algum inimigo escapou!"
-        if perdeu:
-            print(f"{frase} GAME OVER.")
+        if vidas <= 0:
+            print(f"{frase} GAME OVER.                       ")
             while esperar < 100000000:
                 esperar += 1
-        return perdeu
+            return True
+        else: return False
     
     #função com o WConio2 para receber qualquer entrada
     def entrada_jogador():
         nonlocal aviao_x, aviao_y, tiro_x, tiro_y, altura, largura
-        print(f"a,→ d,← w,↑ s,↓ f=fogo.", f"{onda }R$")
+        print(f"a,→ d,← w,↑ s,↓ f=fogo.", f"{moedas }R$  {mostrar_vida(vidas)}")
         if WConio2.kbhit():
             codigo, simbolo = WConio2.getch()
             print(codigo, " ", simbolo)  # descobre o codigo da tecla pressionada
@@ -227,7 +244,7 @@ def jogo():
                 
     #move o tiro do jogador para cima
     def movertiro(tiro_y):
-        if tiro_y >= 0:
+        if tiro_y >= 0 and cont % status.lerdeza_tiro == 0:
             return tiro_y - 1
         return tiro_y     
     #move os inimigos para baixo

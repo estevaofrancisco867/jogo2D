@@ -1,3 +1,4 @@
+#sprites.py possui todas as sprites e retorna elas por meio de funções get
 def get_aviao():
     sprite_aviao = [
     "  █  ",
@@ -31,6 +32,7 @@ def get_dinheiro():
     ]
     return sprite_dinheiro
     
+#as funções get_vida, dano etc recebem a quantidade como parâmetro para mostrar um número ao lado da palavra
 def get_vida(qtd):
   sprite_vida = [
       "██╗   ██╗██╗██████╗  █████╗ ███████╗   ",
@@ -119,7 +121,7 @@ def get_vel_tiro(qtd):
         " ╚████╔╝ ███████╗███████╗██╗██║   ██║██║  ██║╚██████╔╝╚═╝",
         "  ╚═══╝  ╚══════╝╚══════╝╚═╝╚═╝   ╚═╝╚═╝  ╚═╝ ╚═════╝    "
     ]
-  if qtd == 21:
+  if qtd == 13:
     qtd = [
     " ██╗     ",
     "███║     ",
@@ -128,7 +130,7 @@ def get_vel_tiro(qtd):
     " ██║     ",
     " ╚═╝     "
 ]
-  if qtd == 11:
+  if qtd == 7:
     qtd = [
     "██████╗  ",
     "╚════██╗ ",
@@ -158,11 +160,11 @@ def get_foguete_menu():
     "                 █     █                 ",
     "                █       █                ",
     "               █         █               ",
-    "               █         █               ",
-    "               █  █████  █               ",
-    "            ████  █   █  ████            ",
-    "           █   █  █████  █   █           ",
-    "█████     █    █         █    █     █████",
+    "█████          █         █          █████",
+    "█   █          █  █████  █          █   █",
+    "█   █       ████  █   █  ████       █   █",
+    "█   █      █   █  █████  █   █      █   █",
+    "█   █     █    █         █    █     █   █",
     "█   █    █     █         █     █    █   █",
     "█   █   █      █         █      █   █   █",
     "█   █   █      █         █      █   █   █",
@@ -185,7 +187,7 @@ def get_seta():
    ]
    return sprite_seta
 
-def get_dinheiro_menu():
+def get_dinheiro_menu(num):
   digitos = [
     [
         "▄▀▄ ",
@@ -234,10 +236,34 @@ def get_dinheiro_menu():
     ],
     [
         "▄▀▄ ",
-        "▀▀█  ",
+        "▀▀█ ",
         "▀▀  "
     ]
   ]
+  reais = [
+        "█▀▄ █▀▀",
+        "█▀▄ ▀▀█",
+        "▀ ▀ ▀▀▀"
+    ]
+  #transforma numero em string e para cara char na string coloca na sprite
+  string_num = str(num)
+  sprite_dinheiro_menu = ["", "", ""]
+
+  for numero in string_num:
+      digito = int(numero)
+      for caractere in range(3):
+          sprite_dinheiro_menu[caractere] += digitos[digito][caractere]
+  for linha in range(3):
+      sprite_dinheiro_menu[linha] += reais[linha]
+  return sprite_dinheiro_menu
+
+def get_voltar():
+  sprite_voltar = [
+    "█ █ █▀█ █   ▀█▀ █▀█ █▀▄",
+    "▀▄▀ █ █ █    █  █▀█ █▀▄",
+    " ▀  ▀▀▀ ▀▀▀  ▀  ▀ ▀ ▀ ▀"
+  ]
+  return sprite_voltar
 
 def get_fase1():
     imagem_fase1 = """

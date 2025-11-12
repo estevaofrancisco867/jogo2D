@@ -123,8 +123,8 @@ def menu_fases():
     item = " "
 
     # espeficações tela
-    altura_y = 40
-    largura_x = 200
+    altura_y = 38
+    largura_x = 150
 
     #coordenadas fase 1
     y_nome_fase1 = 7     #coordenada y inicial do primeiro item esquerdo do nome da primeira fase
@@ -163,8 +163,8 @@ def menu_fases():
     codigo = 0
 
     while True:
-        altura_y = 40
-        largura_x = 200
+        altura_y = 38
+        largura_x = 150
 
         #== LIMPANDO TELA ==
         LimparTela(tela)
