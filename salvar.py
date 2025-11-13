@@ -9,13 +9,19 @@ def salvar():
 
 def carregar():
     carregados = []
+
     with open("save.txt", "r") as arquivo:
         conteudo = arquivo.read().strip()
-        if conteudo:
+        if conteudo != '':
             for item in conteudo.split(" "):
                 if item != '':
                     carregados.append(int(item))
-        print(carregados)
+        else:
+            print("O save está vazio, criando um novo jogo...")
+            novo_jogo()
+            esperar(10000000)
+            return
+        
     status.vida = carregados[0]
     status.dano = carregados[1]
     status.moedas = carregados[2]

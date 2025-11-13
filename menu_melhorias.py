@@ -249,7 +249,5 @@ def menu_melhorias():
                 trocar_tela.trocar_tela("menu")
                 break
 
-        print(status.vida,status.dano,status.lerdeza_tiro)
-
         #== MUDA A POSICAO DA SETA SEGUNDO INPUT ==
         y_seta = MudaCoordenadaYSetaIndicadora(codigo, y_seta, y_vida, y_voltar)

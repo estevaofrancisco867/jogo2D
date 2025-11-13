@@ -174,6 +174,7 @@ def menu():
 
         # se ENTER for apertado e a seta estiver em CONTINUAR
         if codigo == 13 and y_seta == y_continuar:
+            salvar.carregar()
             trocar_tela.trocar_tela("menu_fases")
             break
 

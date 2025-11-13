@@ -2,6 +2,7 @@ import os
 import WConio2
 import trocar_tela
 import sprites
+import status
 
 def menu_fases():
     #função para mudar o local do cursor
@@ -182,17 +183,17 @@ def menu_fases():
             break
 
             # se ENTER for apertado e a seta estiver em Via Láctea
-        if codigo == 13 and x_seta == (x_nome_fase1 - 7):
+        if codigo == 13 and x_seta == (x_nome_fase1 - 7) and status.fase == 1:
             trocar_tela.trocar_tela("jogo")
             break
 
         # se ENTER or apertado e a seta estiver em Hoag´s
-        if codigo == 13 and x_seta == (x_nome_fase2 - 7):
+        if codigo == 13 and x_seta == (x_nome_fase2 - 7) and status.fase == 2:
             trocar_tela.trocar_tela("jogo")
             break
 
         # se Enter for apertado e a seta estiver em Andrômeda
-        if codigo == 13 and x_seta == (x_nome_fase3 - 7):
+        if codigo == 13 and x_seta == (x_nome_fase3 - 7) and status.fase == 3:
             trocar_tela.trocar_tela("jogo")
             break
 
