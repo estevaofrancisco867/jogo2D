@@ -81,7 +81,6 @@ def jogo():
         return False
 
     # Mostra a tela, suas bordas * e os acertos
-    def mostrar_tela(tela, altura, largura):
         print("*" * (largura + 2))
         for x in range(altura):
             print("*", end='')
