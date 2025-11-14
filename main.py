@@ -1,10 +1,8 @@
-import os
 import WConio2  # pip install WConio2
-import random
 import menu
-import jogo
 
+# Caso o save.txt não exista, cria um ao executar o main.py
+with open("save.txt", "a"):
+    pass
 
 menu.menu()
-
-

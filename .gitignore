@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+venv/
+.venv/
+env/
+*.log
+*.sqlite3
+.pytest_cache/
+.mypy_cache/
+save.txt
