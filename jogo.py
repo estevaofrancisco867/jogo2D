@@ -178,10 +178,10 @@ def jogo():
     #função com o WConio2 para receber qualquer entrada
     def entrada_jogador():
         nonlocal aviao_x, aviao_y, tiro_x, tiro_y, altura, largura
-        print(f"a,→ d,← w,↑ s,↓ f=fogo.", f"{status.onda}R$  {mostrar_vida(vidas)}       ")
+        print(f"a,→ d,← w,↑ s,↓ f=fogo.", f"{status.moedas}R$  {mostrar_vida(vidas)}       ")
         if WConio2.kbhit():
             codigo, simbolo = WConio2.getch()
-            print(codigo, " ", simbolo)  # descobre o codigo da tecla pressionada
+            #print(codigo, " ", simbolo)  # descobre o codigo da tecla pressionada
 
             def aviao_esquerda(aviao_x):
                 if aviao_x > 0:
@@ -239,7 +239,7 @@ def jogo():
         return tiro_y     
     #move os inimigos para baixo
     def mover_inimigos(cont, inimigos):
-        if cont % 70 == 0:
+        if cont % 80 == 0:
             return [(x, y + 1) for (x, y) in inimigos if y + 1 < altura]
         return inimigos
 
@@ -282,7 +282,7 @@ def jogo():
     #move cada moeda para baixo e se ela sumir da tela deleta
     def mover_dinheiros(dinheiros):
         d_filtrados = []
-        if len(dinheiros) <= 0 or cont % 30 != 0:
+        if len(dinheiros) <= 0 or cont % 40 != 0:
             return dinheiros
         else:
             for d in dinheiros:
@@ -296,7 +296,7 @@ def jogo():
     # Inimigos atiram
     def inimigos_atiram():
         nonlocal tiros_inimigos
-        if cont % 1000 == 0:  # Cada ciclos os inimigos atiram
+        if cont % 500 == 0:  # Cada ciclos os inimigos atiram
             for (x, y) in inimigos_horizontais:
                 tiros_inimigos.append((x + 3, y + 3))  # Tiros dos inimigos (para baixo)
 

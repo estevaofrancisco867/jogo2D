@@ -107,11 +107,11 @@ def menu_melhorias():
 
         if atributo == "voltar": texto = "Volta para o menu principal.                        "
         elif lvl == lista[1]:
-           texto = texto.replace("&","Custa 5R$.")
+           texto = texto.replace("&",f"Custa {custo_upg_1}R$.")
         elif lvl == lista[2]:
-           texto = texto.replace("&","Custa 10R$.")
+           texto = texto.replace("&",f"Custa {custo_upg_2}R$.")
         elif lvl == lista[3]:
-           texto = texto.replace("&","Nível Máximo")
+           texto = texto.replace("&", "Nível Máximo.")
 
         
         print(texto)
@@ -176,8 +176,8 @@ def menu_melhorias():
     y_voltar, x_voltar = [altura_y - 5,60]
 
     #Valores como parâmetro (soft coding)
-    custo_upg_1 = 5
-    custo_upg_2 = 10
+    custo_upg_1 = 4
+    custo_upg_2 = 8
     vida = status.vida
     dano = status.dano
     vel_tiro = status.lerdeza_tiro
@@ -219,14 +219,14 @@ def menu_melhorias():
             break
         # se a seta estiver em VIDA
         if y_seta == y_vida + 1:
-            descricao("vida",vida)
+            descricao("vida",status.vida)
             # e ENTER for apertado
             if codigo == 13:
                 status.moedas, status.vida = melhorar_vida(status.moedas)
 
         # se a seta estiver em DANO
         if y_seta == y_dano + 1:
-            descricao("dano",dano)
+            descricao("dano",status.dano)
             if codigo == 13:
                 status.moedas, status.dano = melhorar_dano(status.moedas)
 
