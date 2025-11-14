@@ -1,13 +1,15 @@
 import os
-import WConio2
+import WConio2 # pip install WConio2
 import sprites
 import trocar_tela
 import salvar
 
 def menu():
+
     #função para mudar o local do cursor
     def gotoxy(x, y):
         print(f"\033[{y};{x}H", end='', flush=True)
+
     #função para criar tela(matriz)
     def CriarTela(altura_y, largura_x, tela, item):
         for y in range(altura_y):
@@ -134,9 +136,6 @@ def menu():
     y_seta = 18
     x_seta = 44
     imagemseta = sprites.get_seta()
-    # #estado:opção escolhida
-    # state = ""
-
 
     # cria a tela
     CriarTela(altura_y, largura_x, tela, item)

@@ -1,5 +1,5 @@
 import os
-import WConio2
+import WConio2 # pip install WConio2
 import trocar_tela
 import sprites
 import status
@@ -22,16 +22,20 @@ def menu_fases():
                 tela[y][x] = " "
 
     #função para desenhar na tela(matriz)
-    def DesenharTela(tela, y_nome_fase1, x_nome_fase1, y_primeiro_elemento_imagem_fase1, x_primeiro_elemento_imagem_fase1, y_nome_fase2, x_nome_fase2, y_primeiro_elemento_imagem_fase2, x_primeiro_elemento_imagem_fase2, y_nome_fase3, x_nome_fase3, y_primeiro_elemento_imagem_fase3, x_primeiro_elemento_imagem_fase3, y_seta, x_seta):
+    def DesenharTela(tela, y_nome_fase1, x_nome_fase1, y_primeiro_elemento_imagem_fase1, x_primeiro_elemento_imagem_fase1,
+                      y_nome_fase2, x_nome_fase2, y_primeiro_elemento_imagem_fase2, x_primeiro_elemento_imagem_fase2, y_nome_fase3,
+                        x_nome_fase3, y_primeiro_elemento_imagem_fase3, x_primeiro_elemento_imagem_fase3, y_seta, x_seta):
         print("A, a, seta esquerda\tD, d, seta direita\nEsc para voltar\t\tEnter para selecionar")
         for y in range(altura_y):
             for x in range(largura_x):
+
                 #Desenha nome da primeira fase
                 if y == y_nome_fase1 and x == x_nome_fase1:
                     linhas = imagem_fase1nome.splitlines()
                     for i1, linha in enumerate(linhas):
                         for i2, elemento in enumerate(linha):
                             tela[y + i1][x + i2] = elemento
+
                 #Desenha a imagem da Via Láctea
                 if y == y_primeiro_elemento_imagem_fase1 and x == x_primeiro_elemento_imagem_fase1:
                     linhas = imagem_fase1.splitlines()  #quebra a imagem em linhas e coloca em uma lista
@@ -140,13 +144,11 @@ def menu_fases():
     x_primeiro_elemento_imagem_fase3 = 96
     imagem_fase3nome = sprites.get_fase3nome()
     imagem_fase3 = sprites.get_fase3()
+
     #coordenadas iniciais da Seta Indicadora no menu
     y_seta = 4
     x_seta = 1
     imagemseta = sprites.get_seta()
-    # #estado:opção escolhida
-    # state = ""
-
 
     # cria a tela
     CriarTela(altura_y, largura_x, tela, item)
@@ -165,7 +167,9 @@ def menu_fases():
         LimparTela(tela)
 
         #== DESENHAR O MENU NA TELA ==
-        DesenharTela(tela, y_nome_fase1, x_nome_fase1, y_primeiro_elemento_imagem_fase1, x_primeiro_elemento_imagem_fase1, y_nome_fase2, x_nome_fase2, y_primeiro_elemento_imagem_fase2, x_primeiro_elemento_imagem_fase2, y_nome_fase3, x_nome_fase3, y_primeiro_elemento_imagem_fase3, x_primeiro_elemento_imagem_fase3, y_seta, x_seta)
+        DesenharTela(tela, y_nome_fase1, x_nome_fase1, y_primeiro_elemento_imagem_fase1, x_primeiro_elemento_imagem_fase1,
+                      y_nome_fase2, x_nome_fase2, y_primeiro_elemento_imagem_fase2, x_primeiro_elemento_imagem_fase2, y_nome_fase3,
+                        x_nome_fase3, y_primeiro_elemento_imagem_fase3, x_primeiro_elemento_imagem_fase3, y_seta, x_seta)
 
         #== COLOCANDO A TELA NO TERMINAL ==
         gotoxy(0,0)
@@ -182,18 +186,18 @@ def menu_fases():
             trocar_tela.trocar_tela("menu")
             break
 
-            # se ENTER for apertado e a seta estiver em Via Láctea
+            # se ENTER for apertado e a seta estiver na Via Láctea
         if codigo == 13 and x_seta == (x_nome_fase1 - 7) and status.fase == 1:
             trocar_tela.trocar_tela("jogo")
             break
 
-        # se ENTER or apertado e a seta estiver em Hoag´s
-        if codigo == 13 and x_seta == (x_nome_fase2 - 7) and status.fase == 2:
+        # se ENTER for apertado e a seta estiver em Hoag´s
+        elif codigo == 13 and x_seta == (x_nome_fase2 - 7) and status.fase == 2:
             trocar_tela.trocar_tela("jogo")
             break
 
         # se Enter for apertado e a seta estiver em Andrômeda
-        if codigo == 13 and x_seta == (x_nome_fase3 - 7) and status.fase == 3:
+        elif codigo == 13 and x_seta == (x_nome_fase3 - 7) and status.fase == 3:
             trocar_tela.trocar_tela("jogo")
             break
 

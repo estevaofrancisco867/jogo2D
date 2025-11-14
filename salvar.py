@@ -1,12 +1,17 @@
 import status
 
 valores_status = [status.vida,status.dano,status.moedas,status.lerdeza_tiro,status.fase,status.onda]
+
+# pega os valores de status.py e escreve no arquivo save.txt
 def salvar():
     with open("save.txt", "w") as arquivo:
+
+        # getValores -> retorna uma lista com todos os valores de status.py
         for item in status.getValores():
             arquivo.write(str(item) + " ")
-        print("Jogo salvo!")
+        print("Jogo salvo!                ")
 
+# contrario de salvar: pega os valores do save.txt e define os de status
 def carregar():
     carregados = []
 
@@ -17,11 +22,12 @@ def carregar():
                 if item != '':
                     carregados.append(int(item))
         else:
-            print("O save está vazio, criando um novo jogo...")
+            print("O save está vazio.      ")
             novo_jogo()
             esperar(10000000)
             return
-        
+    
+    # cada variavel de status recebe um valor do arquivo
     status.vida = carregados[0]
     status.dano = carregados[1]
     status.moedas = carregados[2]
@@ -31,6 +37,7 @@ def carregar():
     print("carregando save...")
     esperar(10000000)
 
+# define os valores do arquivo e do status como iniciais
 def novo_jogo():
     status.vida = 3
     status.dano = 1
@@ -41,9 +48,10 @@ def novo_jogo():
     arquivo = open("save.txt", "w")
     arquivo.write("3 1 0 13 1 0")
     arquivo.close()
-    print("Criando novo save...")
+    print("Criando novo save...       ")
     esperar(10000000)
 
+# simula um loading rodando um while até o número "segundos"
 def esperar(segundos):
     cont = 0
     while cont < segundos:

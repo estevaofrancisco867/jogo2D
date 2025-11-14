@@ -51,11 +51,8 @@ def novos_inimigos():
                     [(5, 0),(20, 0),(35, 0),(50, 0),(65, 0),(80, 0),(95, 0),(110, 0),(125, 0),(140, 0)],
                     [6,6,6,6,6,6,6,6,6,6],[(0, 5),(100, 5),(50, 10)],[6, 6, 6])
             case _: return ([],[],[],[])
-            # case _:
-            #     # Caso a fase continue, manter a dificuldade alta
-            #     return(
-            #         [(5, 0),(20, 0),(35, 0),(50, 0),(65, 0),(80, 0),(95, 0),(110, 0),(125, 0),(140, 0)],
-            #         [6,6,6,6,6,6,6,6,6,6],[(0, 5),(100, 5),(50, 10)],[6, 6, 6])
+
+
     # se estivermos na fase 3:
     if status.fase == 3:
         match status.onda:
@@ -104,14 +101,10 @@ def novos_inimigos():
                 return(
                     [(5, 0),(15, 0),(25, 0),(35, 0),(45, 0),(55, 0),(70, 0),(80, 0),(90, 0),(100, 0),(110, 0),(120, 0),(135, 0)],
                 [12,12,12,12,12,12,12,12,12,12,12,12,12],[(0, 5),(100, 5),(50, 10),(130, 15),(75, 20)],[15, 15, 15, 15, 15])
-            # Pós-vitória ou continuação de dificuldade máxima
-            # case _:
-            #     return(
-            #         [(5, 0),(15, 0),(25, 0),(35, 0),(45, 0),(55, 0),(70, 0),(80, 0),(90, 0),(100, 0),(110, 0),(120, 0),(135, 0)],
-            #     [12,12,12,12,12,12,12,12,12,12,12,12,12],[(0, 5),(100, 5),(50, 10),(130, 15),(75, 20)],[15, 15, 15, 15, 15])
             case _: return ([],[],[],[])
             
-#retorna True caso o jogador ganhe a fase/jogo
+#   retorna True caso as listas de inimigos e moedas estejam vazios e
+# novos_inimigos retorne [] dependendo da fase
 def checar_vitoria(inimigos, dinheiros, inimigos_horizontais):
     esperar = 0
     galaxia = ""

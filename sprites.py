@@ -1,4 +1,5 @@
 #sprites.py possui todas as sprites e retorna elas por meio de funções get
+
 def get_aviao():
     sprite_aviao = [
     "  █  ",
@@ -32,7 +33,7 @@ def get_dinheiro():
     ]
     return sprite_dinheiro
     
-#as funções get_vida, dano etc recebem a quantidade como parâmetro para mostrar um número ao lado da palavra
+#as funções get_vida, dano e vel_tiro recebem a quantidade como parâmetro para mostrar um número ao lado da palavra
 def get_vida(qtd):
   sprite_vida = [
       "██╗   ██╗██╗██████╗  █████╗ ███████╗   ",
@@ -279,8 +280,8 @@ def get_titulo():
     ██║  ███╗███████║██║     ███████║██║        ██║   ██║██║     ███████║
     ██║   ██║██╔══██║██║     ██╔══██║██║        ██║   ██║██║     ██╔══██║
     ╚██████╔╝██║  ██║███████╗██║  ██║╚██████╗   ██║   ██║╚██████╗██║  ██║
-     ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝ ╚═════╝   ╚═╝   ╚═╝ ╚═════╝╚═╝  ╚═╝ """.strip("\n")
-   return imagemtitulo
+     ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝ ╚═════╝   ╚═╝   ╚═╝ ╚═════╝╚═╝  ╚═╝ """.strip("\n") #remove os quebra linhas
+   return imagemtitulo 
 
 def get_continuar():
    imagemcontinuar = """

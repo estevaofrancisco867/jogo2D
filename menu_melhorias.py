@@ -1,5 +1,5 @@
 import os
-import WConio2
+import WConio2 # pip install WConio2
 import trocar_tela
 import sprites
 import status
@@ -51,12 +51,6 @@ def menu_melhorias():
 
                 if y == y_descricao and x == x_descricao:
                     mostrar_sprite(["↑, w ou W e ↓,s ou S para navegação."],x_descricao,y_descricao)
-                #desenha os limites da tela
-                # tela[y][largura_x - 1] = "*"
-                # tela[y][0] = "*"
-                # tela[altura_y - 1][x] = "*"
-                # tela[0][x] = "*"                
-
 
     #Função para colocar a tela(matriz) no terminal
     def MostrarTela(tela):
@@ -246,7 +240,7 @@ def menu_melhorias():
         if y_seta == y_voltar:
             descricao("voltar")
             if codigo == 13:
-                trocar_tela.trocar_tela("menu")
+                trocar_tela.trocar_tela("menu_fases")
                 break
 
         #== MUDA A POSICAO DA SETA SEGUNDO INPUT ==
