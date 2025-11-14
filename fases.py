@@ -9,13 +9,11 @@ def novos_inimigos():
         match status.onda:
             case 1:
                 return(
-                    [(60, 0),(75, 0),(45, 0),(60, 0)],[1,1,1,1],[(0, 5)],[2])
-            # case 2:
-            #     return(
-            #         [(15, 0),(30, 0),(45, 0),(60, 0),(75, 0)],[1,1,1,1,1],[(0, 5)],[2])
+                    [(60, 0),(75, 0),(90, 0),(105, 0)],[1,1,1,1],[],[])
             case 2:
-                return([(15, 0)],[1],[(0, 5)],[2])
+                return([(50, 0),(65, 0),(80, 0),(95, 0)],[1,1,1,1],[],[])
             case _: return ([],[],[],[])
+
     # MUDA: Aumento do número de inimigos e vida para a Fase 2
     if status.fase == 2:
         match status.onda:
@@ -51,7 +49,6 @@ def novos_inimigos():
                     [(5, 0),(20, 0),(35, 0),(50, 0),(65, 0),(80, 0),(95, 0),(110, 0),(125, 0),(140, 0)],
                     [6,6,6,6,6,6,6,6,6,6],[(0, 5),(100, 5),(50, 10)],[6, 6, 6])
             case _: return ([],[],[],[])
-
 
     # se estivermos na fase 3:
     if status.fase == 3:
